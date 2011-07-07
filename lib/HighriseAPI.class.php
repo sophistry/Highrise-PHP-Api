@@ -382,6 +382,10 @@
 			
 			return $return;
 		}
+
+		//AJAY TODO
+		public function getCustomFields() {
+		}
 		
 	}
 	
