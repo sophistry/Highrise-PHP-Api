@@ -41,7 +41,7 @@ Find People by Search Term
 
 	$people = $highrise->findPeopleBySearchTerm("John");
 	foreach($people as $p)
-		print $person->getFirstName() . "\n";
+		print $p->getFirstName() . "\n";
 
 Print all notes
 ----- --- -----
