@@ -24,10 +24,10 @@
 			$this->curl = curl_init();
 			curl_setopt($this->curl,CURLOPT_RETURNTRANSFER,true);
 
-	    curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Accept: application/xml', 'Content-Type: application/xml'));
+			curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Accept: application/xml', 'Content-Type: application/xml'));
 			// curl_setopt($curl,CURLOPT_POST,true);
 			curl_setopt($this->curl,CURLOPT_SSL_VERIFYPEER,0);
-			curl_setopt($this->curl,CURLOPT_SSL_VERIFYHOST,0);	
+			curl_setopt($this->curl,CURLOPT_SSL_VERIFYHOST,0);
 		}
 	
 		public function setAccount($account)
@@ -57,14 +57,14 @@
 				curl_setopt($this->curl, CURLOPT_VERBOSE, true);
 				
 			curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Accept: application/xml', 'Content-Type: application/xml'));
-		  curl_setopt($this->curl, CURLOPT_USERPWD,$this->token.':x');
+			curl_setopt($this->curl, CURLOPT_USERPWD,$this->token.':x');
 			curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER,0);
 			curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST,0);
 			curl_setopt($this->curl, CURLOPT_RETURNTRANSFER,true);
 			
 							
 			if ($verb != "POST")
-			  curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $verb);
+				curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, $verb);
  			else
 				curl_setopt($this->curl, CURLOPT_POST, true);
 				
@@ -81,7 +81,7 @@
 		protected function getURL($path)
 		{
 			curl_setopt($this->curl, CURLOPT_HTTPHEADER, array('Accept: application/xml', 'Content-Type: application/xml'));
-		  curl_setopt($this->curl, CURLOPT_USERPWD,$this->token.':x');
+			curl_setopt($this->curl, CURLOPT_USERPWD,$this->token.':x');
 			curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER,0);
 			curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST,0);
 			curl_setopt($this->curl, CURLOPT_RETURNTRANSFER,true);
@@ -301,7 +301,7 @@
 		
 		public function findPeopleByEmail($email)
 		{
-		 return $this->findPeopleBySearchCriteria(array("email"=>$email));
+			return $this->findPeopleBySearchCriteria(array("email"=>$email));
 		}
 		
 		public function findPeopleByTitle($title)
@@ -411,77 +411,77 @@
 		
 		public function setUpdatedAt($updated_at)
 		{
-		  $this->updated_at = (string)$updated_at;
+			$this->updated_at = (string)$updated_at;
 		}
 
 		public function getUpdatedAt()
 		{
-		  return $this->updated_at;
+			return $this->updated_at;
 		}
 
 		public function setCreatedAt($created_at)
 		{
-		  $this->created_at = (string)$created_at;
+			$this->created_at = (string)$created_at;
 		}
 
 		public function getCreatedAt()
 		{
-		  return $this->created_at;
+			return $this->created_at;
 		}
 
 		
 		public function setDropbox($dropbox)
 		{
-		  $this->dropbox = (string)$dropbox;
+			$this->dropbox = (string)$dropbox;
 		}
 
 		public function getDropbox()
 		{
-		  return $this->dropbox;
+			return $this->dropbox;
 		}
 
 		
 		public function setToken($token)
 		{
-		  $this->token = (string)$token;
+			$this->token = (string)$token;
 		}
 
 		public function getToken()
 		{
-		  return $this->token;
+			return $this->token;
 		}
 
 		
 		public function setEmailAddress($email_address)
 		{
-		  $this->email_address = (string)$email_address;
+			$this->email_address = (string)$email_address;
 		}
 
 		public function getEmailAddress()
 		{
-		  return $this->email_address;
+			return $this->email_address;
 		}
 
 		
 		public function setName($name)
 		{
-		  $this->name = (string)$name;
+			$this->name = (string)$name;
 		}
 
 		public function getName()
 		{
-		  return $this->name;
+			return $this->name;
 		}
 
 		
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}
 
 		
@@ -553,12 +553,12 @@
 		
 		public function setOwnerId($owner_id)
 		{
-		  $this->owner_id = (string)$owner_id;
+			$this->owner_id = (string)$owner_id;
 		}
 
 		public function getOwnerId()
 		{
-		  return $this->owner_id;
+			return $this->owner_id;
 		}
 
 		
@@ -569,77 +569,77 @@
 			else
 				$notify = false;
 				
-		  $this->notify = (string)$notify;
+			$this->notify = (string)$notify;
 		}
 
 		public function getNotify()
 		{
-		  return $this->notify;
+			return $this->notify;
 		}
 
 		public function setRecordingId($recording_id)
 		{
-		  $this->recording_id = (string)$recording_id;
+			$this->recording_id = (string)$recording_id;
 		}
 
 		public function getRecordingId()
 		{
-		  return $this->recording_id;
+			return $this->recording_id;
 		}
 
 		public function setPublic($public)
 		{
-		  $this->public = (string)$public;
+			$this->public = (string)$public;
 		}
 
 		public function getPublic()
 		{
-		  return $this->public;
+			return $this->public;
 		}
 
 		
 		
 		public function setUpdatedAt($updated_at)
 		{
-		  $this->updated_at = (string)$updated_at;
+			$this->updated_at = (string)$updated_at;
 		}
 
 		public function getUpdatedAt()
 		{
-		  return $this->updated_at;
+			return $this->updated_at;
 		}
 
 		
 		public function setCreatedAt($created_at)
 		{
-		  $this->created_at = (string)$created_at;
+			$this->created_at = (string)$created_at;
 		}
 
 		public function getCreatedAt()
 		{
-		  return $this->created_at;
+			return $this->created_at;
 		}
 
 		
 		public function setAlertAt($alert_at)
 		{
-		  $this->alert_at = (string)$alert_at;
+			$this->alert_at = (string)$alert_at;
 		}
 
 		public function getAlertAt()
 		{
-		  return $this->alert_at;
+			return $this->alert_at;
 		}
 
 		
 		public function setDueAt($due_at)
 		{
-		  $this->due_at = (string)$due_at;
+			$this->due_at = (string)$due_at;
 		}
 
 		public function getDueAt()
 		{
-		  return $this->due_at;
+			return $this->due_at;
 		}
 
 		
@@ -652,45 +652,45 @@
 			if ($frame != null && !in_array($frame, $valid_frames))
 				throw new Exception("$subject_type is not a valid frame. Available frames: " . implode(", ", $valid_frames));
 	
-		  $this->frame = (string)$frame;
+			$this->frame = (string)$frame;
 		}
 
 		public function getFrame()
 		{
-		  return $this->frame;
+			return $this->frame;
 		}
 
 		
 		public function setBody($body)
 		{
-		  $this->body = (string)$body;
+			$this->body = (string)$body;
 		}
 
 		public function getBody()
 		{
-		  return $this->body;
+			return $this->body;
 		}
 
 		
 		public function setCategoryId($category_id)
 		{
-		  $this->category_id = (string)$category_id;
+			$this->category_id = (string)$category_id;
 		}
 
 		public function getCategoryId()
 		{
-		  return $this->category_id;
+			return $this->category_id;
 		}
 
 		
 		public function setSubjectName($subject_name)
 		{
-		  $this->subject_name = (string)$subject_name;
+			$this->subject_name = (string)$subject_name;
 		}
 
 		public function getSubjectName()
 		{
-		  return $this->subject_name;
+			return $this->subject_name;
 		}
 
 		public function setSubjectType($subject_type)
@@ -700,45 +700,45 @@
 			if ($subject_type != null && !in_array($subject_type, $valid_types))
 				throw new Exception("$subject_type is not a valid subject type. Available subject types: " . implode(", ", $valid_types));
 	
-		  $this->subject_type = (string)$subject_type;
+			$this->subject_type = (string)$subject_type;
 		}
 		
 		public function setSubjectId($subject_id)
 		{
-		  $this->subject_id = (string)$subject_id;
+			$this->subject_id = (string)$subject_id;
 		}
 
 		public function getSubjectId()
 		{
-		  return $this->subject_id;
+			return $this->subject_id;
 		}
 
 		
 		public function setAuthorId($author_id)
 		{
-		  $this->author_id = (string)$author_id;
+			$this->author_id = (string)$author_id;
 		}
 
 		public function getAuthorId()
 		{
-		  return $this->author_id;
+			return $this->author_id;
 		}
 
 		
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}
 
 		
 		public function toXML()
 		{
-			$xml  = "<task>\n";
+			$xml = "<task>\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 
@@ -816,12 +816,12 @@
 		
 		public function setTitle($title)
 		{
-		  $this->title = (string)$title;
+			$this->title = (string)$title;
 		}
 
 		public function getTitle()
 		{
-		  return $this->title;
+			return $this->title;
 		}
 
 		public function __construct(HighriseAPI $highrise)
@@ -927,33 +927,33 @@
 
 		public function setSubjectName($subject_name)
 		{
-		  $this->subject_name = (string)$subject_name;
+			$this->subject_name = (string)$subject_name;
 		}
 
 		public function getSubjectName()
 		{
-		  return $this->subject_name;
+			return $this->subject_name;
 		}
 		
 		public function setVisibleTo($visible_to)
 		{
-		  $this->visible_to = (string)$visible_to;
+			$this->visible_to = (string)$visible_to;
 		}
 
 		public function getVisibleTo()
 		{
-		  return $this->visible_to;
+			return $this->visible_to;
 		}
 
 		
 		public function setUpdatedAt($updated_at)
 		{
-		  $this->updated_at = (string)$updated_at;
+			$this->updated_at = (string)$updated_at;
 		}
 
 		public function getUpdatedAt()
 		{
-		  return $this->updated_at;
+			return $this->updated_at;
 		}
 
 		
@@ -964,66 +964,66 @@
 			if ($subject_type != null && !in_array($subject_type, $valid_types))
 				throw new Exception("$subject_type is not a valid subject type. Available subject types: " . implode(", ", $valid_types));
 	
-		  $this->subject_type = (string)$subject_type;
+			$this->subject_type = (string)$subject_type;
 		}
 
 		public function getSubjectType()
 		{
-		  return $this->subject_type;
+			return $this->subject_type;
 		}
 
 		public function setSubjectId($subject_id)
 		{
-		  $this->subject_id = (string)$subject_id;
+			$this->subject_id = (string)$subject_id;
 		}
 
 		public function getSubjectId()
 		{
-		  return $this->subject_id;
+			return $this->subject_id;
 		}
 
 		
 		public function setOwnerId($owner_id)
 		{
-		  $this->owner_id = (string)$owner_id;
+			$this->owner_id = (string)$owner_id;
 		}
 
 		public function getOwnerId()
 		{
-		  return $this->owner_id;
+			return $this->owner_id;
 		}
 
 		
 		public function setCreatedAt($created_at)
 		{
-		  $this->created_at = (string)$created_at;
+			$this->created_at = (string)$created_at;
 		}
 
 		public function getCreatedAt()
 		{
-		  return $this->created_at;
+			return $this->created_at;
 		}
 
 		
 		public function setBody($body)
 		{
-		  $this->body = (string)$body;
+			$this->body = (string)$body;
 		}
 
 		public function getBody()
 		{
-		  return $this->body;
+			return $this->body;
 		}
 
 		
 		public function setAuthorId($author_id)
 		{
-		  $this->author_id = (string)$author_id;
+			$this->author_id = (string)$author_id;
 		}
 
 		public function getAuthorId()
 		{
-		  return $this->author_id;
+			return $this->author_id;
 		}
 
 		public function __construct(HighriseAPI $highrise)
@@ -1040,7 +1040,7 @@
 		
 		public function toXML()
 		{
-			$xml  = "<" . $this->_note_type . ">\n";
+			$xml = "<" . $this->_note_type . ">\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 			
@@ -1073,12 +1073,12 @@
 
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}
 	}
 	
@@ -1096,7 +1096,7 @@
 		
 		public function toXML()
 		{
-			$xml  = "<tag>\n";
+			$xml = "<tag>\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 			$xml .= '<name>' . $this->getName() . "</name>\n";
@@ -1111,22 +1111,22 @@
 			
 		public function setName($name)
 		{
-		  $this->name = (string)$name;
+			$this->name = (string)$name;
 		}
 
 		public function getName()
 		{
-		  return $this->name;
+			return $this->name;
 		}
 
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}
 	}
 	
@@ -1145,7 +1145,7 @@
 		
 		public function toXML()
 		{
-			$xml  = "<email-address>\n";
+			$xml = "<email-address>\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 			$xml .= '<address>' . $this->getAddress() . "</address>\n";
@@ -1161,12 +1161,12 @@
 		
 		public function setAddress($address)
 		{
-		  $this->address = (string)$address;
+			$this->address = (string)$address;
 		}
 
 		public function getAddress()
 		{
-		  return $this->address;
+			return $this->address;
 		}
 	
 		public function setLocation($location)
@@ -1176,22 +1176,22 @@
 			if ($location != null && !in_array($location, $valid_locations))
 				throw new Exception("$location is not a valid location. Available locations: " . implode(", ", $valid_locations));
 				
-		  $this->location = (string)$location;
+			$this->location = (string)$location;
 		}
 
 		public function getLocation()
 		{
-		  return $this->location;
+			return $this->location;
 		}
 
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}	
 	}
 		
@@ -1212,7 +1212,7 @@
 		
 		public function toXML()
 		{
-			$xml  = "<instant-messenger>\n";
+			$xml = "<instant-messenger>\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 			$xml .= '<protocol>' . $this->getProtocol() . "</protocol>\n";
@@ -1229,12 +1229,12 @@
 		
 		public function setAddress($address)
 		{
-		  $this->address = (string)$address;
+			$this->address = (string)$address;
 		}
 
 		public function getAddress()
 		{
-		  return $this->address;
+			return $this->address;
 		}
 
 		public function setProtocol($protocol)
@@ -1243,12 +1243,12 @@
 			if ($protocol != null && !in_array($protocol, $valid_protocols))
 				throw new Exception("$protocol is not a valid protocol. Available protocols: " . implode(", ", $valid_protocols));
 			
-		  $this->protocol = (string)$protocol;
+			$this->protocol = (string)$protocol;
 		}
 
 		public function getProtocol()
 		{
-		  return $this->protocol;
+			return $this->protocol;
 		}
 
 		public function setLocation($location)
@@ -1258,22 +1258,22 @@
 			if ($location != null && !in_array($location, $valid_locations))
 				throw new Exception("$location is not a valid location. Available locations: " . implode(", ", $valid_locations));
 			
-		  $this->location = (string)$location;
+			$this->location = (string)$location;
 		}
 
 		public function getLocation()
 		{
-		  return $this->location;
+			return $this->location;
 		}
 		
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}	
 	}
 	
@@ -1289,7 +1289,7 @@
 		
 		public function toXML()
 		{
-			$xml  = "<address>\n";
+			$xml = "<address>\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 			$xml .= '<city>' . $this->getCity() . "</city>\n";
@@ -1343,32 +1343,32 @@
 		
 		public function setZip($zip)
 		{
-		  $this->zip = (string)$zip;
+			$this->zip = (string)$zip;
 		}
 
 		public function getZip()
 		{
-		  return $this->zip;
+			return $this->zip;
 		}
 		
 		public function setStreet($street)
 		{
-		  $this->street = (string)$street;
+			$this->street = (string)$street;
 		}
 
 		public function getStreet()
 		{
-		  return $this->street;
+			return $this->street;
 		}
 
 		public function setState($state)
 		{
-		  $this->state = (string)$state;
+			$this->state = (string)$state;
 		}
 
 		public function getState()
 		{
-		  return $this->state;
+			return $this->state;
 		}
 
 		public function setLocation($location)
@@ -1378,42 +1378,42 @@
 			if ($location != null && !in_array($location, $valid_locations))
 				throw new Exception("$location is not a valid location. Available locations: " . implode(", ", $valid_locations));
 			
-		  $this->location = (string)$location;
+			$this->location = (string)$location;
 		}
 
 		public function getLocation()
 		{
-		  return $this->location;
+			return $this->location;
 		}
 
 		public function setCountry($country)
 		{
-		  $this->country = (string)$country;
+			$this->country = (string)$country;
 		}
 
 		public function getCountry()
 		{
-		  return $this->country;
+			return $this->country;
 		}
 
 		public function setCity($city)
 		{
-		  $this->city = (string)$city;
+			$this->city = (string)$city;
 		}
 
 		public function getCity()
 		{
-		  return $this->city;
+			return $this->city;
 		}
 		
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}	
 	}
 	
@@ -1432,7 +1432,7 @@
 		
 		public function toXML()
 		{
-			$xml  = "<phone-number>\n";
+			$xml = "<phone-number>\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 			$xml .= '<number>' . $this->getNumber() . "</number>\n";
@@ -1448,33 +1448,33 @@
 			if ($location != null && !in_array($location, $valid_locations))
 				throw new Exception("$location is not a valid location. Available locations: " . implode(", ", $valid_locations));
 			
-		  $this->location = (string)$location;
+			$this->location = (string)$location;
 		}
 
 		public function getLocation ()
 		{
-		  return $this->location;
+			return $this->location;
 		}
 		
 		public function setNumber ($number)
 		{
-		  $this->number = (string)$number;
+			$this->number = (string)$number;
 		}
 
 		public function getNumber ()
 		{
-		  return $this->number;
+			return $this->number;
 		}
 
 		
 		public function setId ($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId ()
 		{
-		  return $this->id;
+			return $this->id;
 		}
 
 		public function __toString()
@@ -1491,7 +1491,7 @@
 		
 		public function toXML()
 		{
-			$xml  = "<web-address>\n";
+			$xml = "<web-address>\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 			$xml .= '<location>' . $this->getLocation() . "</location>\n";
@@ -1509,12 +1509,12 @@
 		
 		public function setUrl($url)
 		{
-		  $this->url = (string)$url;
+			$this->url = (string)$url;
 		}
 
 		public function getUrl()
 		{
-		  return $this->url;
+			return $this->url;
 		}
 		
 		public function setLocation($location)
@@ -1524,22 +1524,22 @@
 			if ($location != null && !in_array($location, $valid_locations))
 				throw new Exception("$location is not a valid location. Available locations: " . implode(", ", $valid_locations));
 			
-		  $this->location = (string)$location;
+			$this->location = (string)$location;
 		}
 
 		public function getLocation()
 		{
-		  return $this->location;
+			return $this->location;
 		}
 		
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}	
 	}
 	
@@ -1558,7 +1558,7 @@
 		
 		public function toXML()
 		{
-			$xml  = "<twitter-account>\n";
+			$xml = "<twitter-account>\n";
 			if ($this->getId() != null)
 				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 			$xml .= '<username>' . $this->getUsername() . "</username>\n";
@@ -1579,13 +1579,13 @@
 		
 		public function setUsername($username)
 		{
-		  $this->username = (string)$username;
+			$this->username = (string)$username;
 			$this->url = $this->getUrl();
 		}
 
 		public function getUsername()
 		{
-		  return $this->username;
+			return $this->username;
 		}
 
 		public function setLocation($location)
@@ -1595,22 +1595,22 @@
 			if ($location != null && !in_array($location, $valid_locations))
 				throw new Exception("$location is not a valid location. Available locations: " . implode(", ", $valid_locations));
 			
-		  $this->location = (string)$location;
+			$this->location = (string)$location;
 		}
 
 		public function getLocation()
 		{
-		  return $this->location;
+			return $this->location;
 		}
 
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}		
 	}
 	
@@ -2041,12 +2041,12 @@
 
 		public function setCompanyId($company_id)
 		{
-		  $this->company_id = (string)$company_id;
+			$this->company_id = (string)$company_id;
 		}
 
 		public function getCompanyId()
 		{
-		  return $this->company_id;
+			return $this->company_id;
 		}
 		
 		public function setVisibleTo($visible_to)
@@ -2056,62 +2056,62 @@
 			if ($visible_to != null && !in_array($visible_to, $valid_permissions))
 				throw new Exception("$visible_to is not a valid visibility permission. Available visibility permissions: " . implode(", ", $valid_permissions));
 			
-		  $this->visible_to = (string)$visible_to;
+			$this->visible_to = (string)$visible_to;
 		}
 
 		public function getVisibleTo()
 		{
-		  return $this->visible_to;
+			return $this->visible_to;
 		}
 		
 		public function setAuthorId($author_id)
 		{
-		  $this->author_id = (string)$author_id;
+			$this->author_id = (string)$author_id;
 		}
 
 		public function getAuthorId()
 		{
-		  return $this->author_id;
+			return $this->author_id;
 		}
 	
 		public function setUpdatedAt($updated_at)
 		{
-		  $this->updated_at = (string)$updated_at;
+			$this->updated_at = (string)$updated_at;
 		}
 
 		public function getUpdatedAt()
 		{
-		  return $this->updated_at;
+			return $this->updated_at;
 		}
 		
 		public function setCreatedAt($created_at)
 		{
-		  $this->created_at = (string)$created_at;
+			$this->created_at = (string)$created_at;
 		}
 
 		public function getCreatedAt()
 		{
-		  return $this->created_at;
+			return $this->created_at;
 		}
 
 		public function setCompanyName($company_name)
 		{
-		  $this->company_name = (string)$company_name;
+			$this->company_name = (string)$company_name;
 		}
 
 		public function getCompanyName()
 		{
-		  return $this->company_name;
+			return $this->company_name;
 		}
 
 		public function setBackground($background)
 		{
-		  $this->background = (string)$background;
+			$this->background = (string)$background;
 		}
 
 		public function getBackground()
 		{
-		  return $this->background;
+			return $this->background;
 		}
 
 		
@@ -2121,43 +2121,43 @@
 		}
 		public function setLastName($last_name)
 		{
-		  $this->last_name = (string)$last_name;
+			$this->last_name = (string)$last_name;
 		}
 
 		public function getLastName()
 		{
-		  return $this->last_name;
+			return $this->last_name;
 		}
 
 		public function setFirstName($first_name)
 		{
-		  $this->first_name = (string)$first_name;
+			$this->first_name = (string)$first_name;
 		}
 
 		public function getFirstName()
 		{
-		  return $this->first_name;
+			return $this->first_name;
 		}
 
 		public function setTitle($title)
 		{
-		  $this->title = (string)$title;
+			$this->title = (string)$title;
 		}
 
 		public function getTitle()
 		{
-		  return $this->title;
+			return $this->title;
 		}
 
 		
 		public function setId($id)
 		{
-		  $this->id = (string)$id;
+			$this->id = (string)$id;
 		}
 
 		public function getId()
 		{
-		  return $this->id;
+			return $this->id;
 		}
 
 		public function __construct(HighriseAPI $highrise)
