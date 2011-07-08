@@ -1087,6 +1087,81 @@
 	}
 	
 	
+	class HighriseCustomfield
+	{
+		public $id;
+		public $subject_field_id;
+		public $subject_field_label;
+		public $value;
+		
+		public function __construct($id = null, $value = null, $subject_field_id = null, $subject_field_label = null)
+		{
+			$this->setId($id);
+			$this->setValue($value);
+			$this->setSubjectFieldId($subject_field_id);
+			$this->setSubjectFieldLabel($subject_field_label);
+		}
+		
+		public function toXML()
+		{
+			$xml = '';
+			if ($this->getId() != null) {
+				$xml = "<subject_data>\n";
+				$xml .= '  <id type="integer">' . $this->getId() . "</id>\n";
+				$xml .= '  <value>' . $this->getValue() . "</value>\n";
+				$xml .= '  <subject_field_id type="integer">' . $this->getSubjectFieldId() . "</subject_field_id>\n";
+				$xml .= '  <subject_field_label>' . $this->getSubjectFieldLabel() . "</subject_field_label>\n";
+				$xml .= "</subject_data>\n";
+			}
+			return $xml;
+		}
+		
+		public function __toString()
+		{
+			return $this->subject_field_label . ": " . $this->value;
+		}
+
+		public function setId($id)
+		{
+			$this->id = (string)$id;
+		}
+
+		public function getId()
+		{
+			return $this->id;
+		}
+			
+		public function setSubjectFieldId($subject_field_id)
+		{
+			$this->subject_field_id = (string)$subject_field_id;
+		}
+
+		public function getSubjectFieldId()
+		{
+			return $this->subject_field_id;
+		}
+
+		public function setSubjectFieldLabel($subject_field_label)
+		{
+			$this->subject_field_label = (string)$subject_field_label;
+		}
+
+		public function getSubjectFieldLabel()
+		{
+			return $this->subject_field_label;
+		}
+
+		public function setValue($value)
+		{
+			$this->value = (string)$value;
+		}
+
+		public function getValue()
+		{
+			return $this->value;
+		}
+	}
+	
 	class HighriseTag
 	{
 		public $id;
@@ -1648,6 +1723,9 @@
 		public $tags;
 		private $original_tags;
 		
+		public $customfields;
+		private $original_customfields;
+		
 		public $notes;
 		public $emails;
 		
@@ -1827,6 +1905,22 @@
 				$this->tags[$v] = $tag;
 			}
 		}
+
+		public function addCustomfield($v)
+		{
+			if ($v instanceof HighriseCustomfield && !isset($this->customfields[$v->getSubjectFieldLabel()]))
+			{
+				$this->customfields[$v->getSubjectFieldLabel()] = $v;
+				$this->original_customfields[$v->getSubjectFieldLabel()] = 1;
+				
+			}
+			elseif (!isset($this->customfields[$v]))
+			{
+				$field = new HighriseCustomfield();
+				$field->setSubjectFieldLabel = $v;
+				$this->customfields[$v] = $field;
+			}
+		}
 			
 		public function toXML($with_id = true)
 		{
@@ -1902,6 +1996,30 @@
 			
 			$this->loadContactDataFromXMLObject($xml_obj->{'contact-data'});
 			$this->loadTagsFromXMLObject($xml_obj->{'tags'});	
+			$this->loadCustomfieldsFromXMLObject($xml_obj->{'subject_datas'});
+		}
+		
+		public function loadCustomfieldsFromXMLObject($xml_obj)
+		{
+			$this->original_customfields = array();
+			$this->customfields = array();
+			
+			if (count($xml_obj->{'subject_data'}) > 0)
+			{
+				foreach($xml_obj->{'subject_data'} as $field)
+				{
+					# print "INSIDE loading custom fields:\n";
+					# print_r($value);
+					# print "-----------------------------\n";
+
+					# $tag = new HighriseTag($value->{'id'}, $value->{'name'});
+					# $original_tags[$tag->getName()] = 1;	
+					# $this->addTag($tag);
+					$new_field = new HighriseCustomfield($field->{'id'}, $field->{'value'}, $field->{'subject_field_id'}, $field->{'subject_field_label'});
+					$this->original_customfields[$new_field->getSubjectFieldLabel()] = 1;
+					$this->addCustomfield($new_field);
+				}
+			}
 		}
 		
 		public function loadTagsFromXMLObject($xml_obj)
@@ -1916,6 +2034,7 @@
 					$tag = new HighriseTag($value->{'id'}, $value->{'name'});
 					$original_tags[$tag->getName()] = 1;	
 					$this->addTag($tag);
+					# print_r($this);
 				}
 			}
 		}

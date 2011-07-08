@@ -27,10 +27,10 @@ $field->save();
 
 print "New field ID: " . $field->getId() . " Created at: " . $field->getCreatedAt() . "\n";
 
-$notes = $person->getNotes();
-foreach($notes as $note)
+$fields = $person->getCustomfields();
+foreach($fields as $field)
 {
-	if ($note->body == "Testi")
+	if ($field->body == "Testi")
 	{
 		print "Deleting: " . $note->id . "\n";
 		$note->delete();
