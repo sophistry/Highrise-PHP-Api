@@ -383,8 +383,20 @@
 			return $return;
 		}
 
-		//AJAY TODO
-		public function getCustomFields() {
+		public function findAllCustomfields()
+		{
+			$xml = $this->getUrl("/subject_fields.xml");
+			$this->checkForErrors("Custom Fields");
+			
+			$xml_object = simplexml_load_string($xml);			
+			print_r($xml_object);
+			$ret = array();
+			foreach($xml_object->{'subject-field'} as $cf)
+			{
+				$ret[(string)$cf->label] = new HighriseCustomfield((string)$cf->id, null, null, (string)$cf->label);
+			}
+			
+			return $ret;
 		}
 		
 	}
@@ -1838,14 +1850,14 @@
 			}
 			
 			// Reload object and add tags.
-				$tags = $this->tags;
-				$original_tags = $this->original_tags;
+			$tags = $this->tags;
+			$original_tags = $this->original_tags;
 				
-				$this->loadFromXMLObject(simplexml_load_string($new_xml));
-				$this->tags = $tags;
-				$this->original_tags = $original_tags;
-				$this->saveTags();
-			
+			$this->loadFromXMLObject(simplexml_load_string($new_xml));
+			$this->tags = $tags;
+			$this->original_tags = $original_tags;
+			$this->saveTags();
+		
 			return true;
 		}
 		
