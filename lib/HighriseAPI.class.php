@@ -2347,7 +2347,7 @@
 				'lost'
 			);
 			if (!in_array($status,$valid_status)) {
-				return false;
+				throw new Exception("'$status' is not a valid status type. Available status names: " . implode(", ", $valid_status));
 			}
 			$status_update_xml = "<status><name>$status</name></status>";
 			$response = $this->postDataWithVerb("/deals/" . $this->getId() . "/status.xml", $status_update_xml, "PUT");
@@ -2400,113 +2400,36 @@
 		}
 
 		
-		public function setNotify($notify)
+		public function setAccountId($account_id)
 		{
-			if ($notify == "true" || $notify == true || $notify == 1)
-				$notify = true;
-			else
-				$notify = false;
-				
-			$this->notify = (string)$notify;
+			$this->account_id = (string)$account_id;
 		}
 
-		public function getNotify()
+		public function getAccountId()
 		{
-			return $this->notify;
+			return $this->account_id;
 		}
 
-		public function setRecordingId($recording_id)
+		public function setAuthorId($author_id)
 		{
-			$this->recording_id = (string)$recording_id;
+			$this->author_id = (string)$author_id;
 		}
 
-		public function getRecordingId()
+		public function getAuthorId()
 		{
-			return $this->recording_id;
-		}
-
-		public function setPublic($public)
-		{
-			$this->public = (string)$public;
-		}
-
-		public function getPublic()
-		{
-			return $this->public;
+			return $this->author_id;
 		}
 
 		
 		
-		public function setUpdatedAt($updated_at)
+		public function setBackground($background)
 		{
-			$this->updated_at = (string)$updated_at;
+			$this->background = (string)$background;
 		}
 
-		public function getUpdatedAt()
+		public function getBackground()
 		{
-			return $this->updated_at;
-		}
-
-		
-		public function setCreatedAt($created_at)
-		{
-			$this->created_at = (string)$created_at;
-		}
-
-		public function getCreatedAt()
-		{
-			return $this->created_at;
-		}
-
-		
-		public function setAlertAt($alert_at)
-		{
-			$this->alert_at = (string)$alert_at;
-		}
-
-		public function getAlertAt()
-		{
-			return $this->alert_at;
-		}
-
-		
-		public function setDueAt($due_at)
-		{
-			$this->due_at = (string)$due_at;
-		}
-
-		public function getDueAt()
-		{
-			return $this->due_at;
-		}
-
-		
-		
-		public function setFrame($subject_type)
-		{
-			$valid_frames = array("today", "tomorrow", "this_week", "next_week", "later", "overdue");
-			$frame = str_replace(" ", "_", strtolower($subject_type));
-			
-			if ($frame != null && !in_array($frame, $valid_frames))
-				throw new Exception("$subject_type is not a valid frame. Available frames: " . implode(", ", $valid_frames));
-	
-			$this->frame = (string)$frame;
-		}
-
-		public function getFrame()
-		{
-			return $this->frame;
-		}
-
-		
-		public function setBody($body)
-		{
-			$this->body = (string)$body;
-		}
-
-		public function getBody()
-		{
-			return $this->body;
+			return $this->background;
 		}
 
 		
@@ -2521,57 +2444,167 @@
 		}
 
 		
-		public function setSubjectName($subject_name)
+		public function setCreatedAt($created_at)
 		{
-			$this->subject_name = (string)$subject_name;
+			$this->created_at = (string)$created_at;
 		}
 
-		public function getSubjectName()
+		public function getCreatedAt()
 		{
-			return $this->subject_name;
-		}
-
-		public function setSubjectType($subject_type)
-		{
-			$valid_types = array("Party", "Company", "Deal", "Kase");
-			$subject_type = ucwords(strtolower($subject_type));
-			if ($subject_type != null && !in_array($subject_type, $valid_types))
-				throw new Exception("$subject_type is not a valid subject type. Available subject types: " . implode(", ", $valid_types));
-	
-			$this->subject_type = (string)$subject_type;
-		}
-		
-		public function setSubjectId($subject_id)
-		{
-			$this->subject_id = (string)$subject_id;
-		}
-
-		public function getSubjectId()
-		{
-			return $this->subject_id;
+			return $this->created_at;
 		}
 
 		
-		public function setAuthorId($author_id)
+		public function setCurrency($currency)
 		{
-			$this->author_id = (string)$author_id;
+			$this->currency = (string)$currency;
 		}
 
-		public function getAuthorId()
+		public function getCurrency()
 		{
-			return $this->author_id;
+			return $this->currency;
+		}
+
+		public function setDuration($duration)
+		{
+			$this->duration = (string)$duration;
+		}
+
+		public function getDuration()
+		{
+			return $this->duration;
 		}
 
 		
-		public function setId($id)
+		public function setGroupId($group_id)
 		{
-			$this->id = (string)$id;
+			$this->group_id = (string)$group_id;
 		}
 
-		public function getId()
+		public function getGroupId()
 		{
-			return $this->id;
+			return $this->group_id;
 		}
+
+		
+		public function setName($name)
+		{
+			$this->name = (string)$name;
+		}
+
+		public function getName()
+		{
+			return $this->name;
+		}
+
+		public function setPartyId($party_id)
+		{
+			$this->party_id = (string)$party_id;
+		}
+
+		public function getPartyId()
+		{
+			return $this->party_id;
+		}
+
+		
+		public function setPrice($price)
+		{
+			$this->price = (string)$price;
+		}
+
+		public function getPrice()
+		{
+			return $this->price;
+		}
+
+		
+		public function setPriceType($price_type)
+		{
+			$this->price_type = (string)$price_type;
+		}
+
+		public function getPriceType()
+		{
+			return $this->price_type;
+		}
+
+		
+		public function setResponsiblePartyId($responsible_party_id)
+		{
+			$this->responsible_party_id = (string)$responsible_party_id;
+		}
+
+		public function getResponsiblePartyId()
+		{
+			return $this->responsible_party_id;
+		}
+
+		public function setStatus($status)
+		{
+			$this->status = (string)$status;
+		}
+
+		public function getStatus()
+		{
+			return $this->status;
+		}
+
+		public function setStatusChangedOn($status_changed_on)
+		{
+			$this->status_changed_on = (string)$status_changed_on;
+		}
+
+		public function getStatusChangedOn()
+		{
+			return $this->status_changed_on;
+		}
+
+		public function setUpdatedAt($updated_at)
+		{
+			$this->updated_at = (string)$updated_at;
+		}
+
+		public function getUpdatedAt()
+		{
+			return $this->updated_at;
+		}
+
+		public function setVisibleTo($visible_to)
+		{
+			$this->visible_to = (string)$visible_to;
+		}
+
+		public function getVisibleTo()
+		{
+			return $this->visible_to;
+		}
+
+		public function setParties($parties)
+		{
+			$this->parties = (string)$parties;
+		}
+
+		public function getParties()
+		{
+			return $this->parties;
+		}
+
+		public function setParty($party)
+		{
+			$this->party = (string)$party;
+		}
+
+		public function getParty()
+		{
+			return $this->party;
+		}
+
+
+
+
+
+
 
 		
 		public function toXML()
