@@ -2312,7 +2312,7 @@
 		private $highrise;
 		public $id;
 
-		public $account_id
+		public $account_id;
 		public $author_id;
 		public $background;
 		public $category_id;
@@ -2339,13 +2339,20 @@
 			$this->curl = curl_init();		
 		}
 
-		public function complete()
+		public function status_update($status)
 		{
-			$task_xml = $this->toXML();
-			$new_task_xml = $this->postDataWithVerb("/tasks/" . $this->getId() . "/complete.xml", "", "POST");
-			$this->checkForErrors("Task", 200);	
-			$this->loadFromXMLObject(simplexml_load_string($new_task_xml));
-			return true;	
+			$valid_status = array(
+				'pending',
+				'won',
+				'lost'
+			);
+			if (!in_array($status,$valid_status)) {
+				return false;
+			}
+			$status_update_xml = "<status><name>$status</name></status>";
+			$response = $this->postDataWithVerb("/deals/" . $this->getId() . "/status.xml", $status_update_xml, "PUT");
+			$this->checkForErrors("Deals", 200);	
+			return true;
 		}
 		
 		public function save()
