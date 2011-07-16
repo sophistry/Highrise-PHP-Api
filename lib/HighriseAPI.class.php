@@ -2379,7 +2379,7 @@
 		
 		public function delete()
 		{
-			$this->postDataWithVerb("/tasks/" . $this->getId() . ".xml", "", "DELETE");
+			$this->postDataWithVerb("/deals/" . $this->getId() . ".xml", "", "DELETE");
 			$this->checkForErrors("Task", 200);	
 			$this->deleted = true;
 		}
