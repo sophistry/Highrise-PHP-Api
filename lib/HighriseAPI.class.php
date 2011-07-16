@@ -2600,52 +2600,31 @@
 			return $this->party;
 		}
 
-
-
-
-
-
-
-		
 		public function toXML()
 		{
-			$xml = "<task>\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 
-			if ($this->getRecordingId() != null)
-			{
-				$xml .= '<recording-id>' . $this->getSubjectId() . "</subject-id>\n";
-			}
-			
-			if ($this->getSubjectId() != null)
-			{
-				$xml .= '<subject-id>' . $this->getSubjectId() . "</subject-id>\n";
-				$xml .= '<subject-type>' . $this->getSubjectType() . "</subject-type>\n";
-			}
-			
-			$xml .= '<body>' . $this->getBody() . "</body>\n";
-			$xml .= '<frame>' . $this->getFrame() . "</frame>\n";
-			
-			if ($this->getCategoryId() != null)
-				$xml .= '<category-id>' . $this->getCategoryId() . "</category-id>\n";
-		
-			if ($this->getOwnerId() != null)	
-				$xml .= '<owner-id>' . $this->getOwnerId() . "</owner-id>\n";
-			
-			if ($this->getDueAt() != null)
-				$xml .= '<due-at>' . $this->getDueAt() . "</due-at>\n";
-			if ($this->getAlertAt() != null)
-				$xml .= '<alert-at>' . $this->getAlertAt() . "</alert-at>\n";
-			
-			if ($this->getPublic() != null)
-				$xml .= '<public type="boolean">' . ($this->getPublic() ? "true" : "false") . "</public>\n";
-			
-			if ($this->getNotify() != null)
-				$xml .= '<notify type="boolean">' . ($this->getNofity() ? "true" : "false") . "</notify>\n";
-			
-
-			$xml .= "</task>\n";
+			$xml  = "<deal>\n";
+			$xml .= '  <account-id>' . $this->getAccountId() . "</account-id>\n";
+			$xml .= '  <author-id>' . $this->getAuthorId() . "</author-id>\n";
+			$xml .= '  <background>' . $this->getBackground() . "</background>\n";
+			$xml .= '  <category-id>' . $this->getCategoryId() . "</category-id>\n";
+			$xml .= '  <created-at>' . $this->getCreatedAt() . "</created-at>\n";
+			$xml .= '  <currency>' . $this->getCurrency() . "</currency>\n";
+			$xml .= '  <duration>' . $this->getDuration() . "</duration>\n";
+			$xml .= '  <group-id>' . $this->getGroupId() . "</group-id>\n";
+			$xml .= '  <name>' . $this->getName() . "</name>\n";
+			$xml .= '  <owner-id>' . $this->getOwnerId() . "</owner-id>\n";
+			$xml .= '  <party-id>' . $this->getPartyId() . "</party-id>\n";
+			$xml .= '  <price>' . $this->getPrice() . "</price>\n";
+			$xml .= '  <price-type>' . $this->getPriceType() . "</price-typen";
+			$xml .= '  <responsible-party-id>' . $this->getResponsiblePartyId() . "</responsible-party-id>\n";
+			$xml .= '  <status>' . $this->getStatus() . "</status>\n";
+			$xml .= '  <status-changed-on>' . $this->getStatusChangedOn() . "</status-changed-on>\n";
+			$xml .= '  <updated-at>' . $this->getUpdatedAt() . "</updated-at>\n";
+			$xml .= '  <visibile-to>' . $this->getVisibleTo() . "</visible-to>\n";
+			$xml .= '  <parties>' . $this->getParties() . "</parties>\n";
+			$xml .= '  <party>' . $this->getParty() . "</party>\n";
+			$xml .= '</deal>';
 			return $xml;
 		}		
 		
