@@ -2622,20 +2622,26 @@
 			if ($this->debug)
 				print_r($xml_obj);
 
-			$this->setId($xml_obj->{'id'});
+			$this->setAccountId($xml_obj->{'account-id'});
 			$this->setAuthorId($xml_obj->{'author-id'});
-			$this->setSubjectId($xml_obj->{'subject-id'});
-			$this->setSubjectType($xml_obj->{'subject-type'});
-			$this->setSubjectName($xml_obj->{'subject-name'});
+			$this->setBackground($xml_obj->{'background'});
 			$this->setCategoryId($xml_obj->{'category-id'});
-			$this->setBody($xml_obj->{'body'});
-			$this->setFrame($xml_obj->{'frame'});
-			$this->setDueAt($xml_obj->{'due-at'});
-			$this->setAlertAt($xml_obj->{'alert-at'});
-		
 			$this->setCreatedAt($xml_obj->{'created-at'});
+			$this->setCurrency($xml_obj->{'currency'});
+			$this->setDuration($xml_obj->{'duration'});
+			$this->setGroupId($xml_obj->{'group-id'});
+			$this->setName($xml_obj->{'name'});
+			$this->setOwnerId($xml_obj->{'owner-id'});
+			$this->setPartyId($xml_obj->{'party-id'});
+			$this->setPrice($xml_obj->{'price'});
+			$this->setPriceType($xml_obj->{'price-type'});
+			$this->setResponsiblePartyId($xml_obj->{'responsible-party-id'});
+			$this->setStatus($xml_obj->{'status'});
+			$this->setStatusChangedOn($xml_obj->{'status-changed-on'});
 			$this->setUpdatedAt($xml_obj->{'updated-at'});
-			$this->setPublic(($xml_obj->{'public'} == "true"));
+			$this->setVisibleTo($xml_obj->{'visible-to'});
+			$this->setParties($xml_obj->{'parties'});
+			$this->setParty($xml_obj->{'party'});
 			return true;
 		}
 
