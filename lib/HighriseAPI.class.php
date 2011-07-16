@@ -220,6 +220,43 @@
 			return $task;
 			
 		}
+
+		/* Deals */
+
+		public function findDealById($id)
+		{
+			$xml = $this->getURL("/deals/$id.xml");
+			$this->checkForErrors("Deal");
+			$deal_xml = simplexml_load_string($xml);
+			$deal = new HighriseTask($this);
+			$deal->loadFromXMLObject($deal_xml);
+			return $deal;
+		}
+
+		public function findAllDeals()
+		{
+			$xml = $this->getUrl("/deals.xml");
+			$this->checkForErrors("Deals");
+			return $this->parseDeals($xml);
+		}
+
+	
+		private function parseDeals($xml)
+		{
+			$xml_object = simplexml_load_string($xml);			
+			$ret = array();
+			foreach($xml_object->deals as $xml_deal)
+			{
+				$deal = new HighriseDeal($this);
+				$deal->loadFromXMLObject($xml_deal);
+				$ret[] = $deal;
+			}
+
+			return $ret;
+		
+		}
+
+
 		
 		/* Notes & Emails */
 
