@@ -1769,6 +1769,7 @@
 		public $web_addresses;
 		public $instant_messengers;
 		public $twitter_accounts;
+		public $type;
 
 		public $tags;
 		private $original_tags;
@@ -1779,6 +1780,13 @@
 		public $notes;
 		public $emails;
 		
+		public function setType($type) {
+			$this->type = $type;
+		}
+		public function getType() {
+			return $this->type;
+		}
+
 		public function getEmailAddresses()
 		{
 			return $this->email_addresses;
@@ -2043,6 +2051,10 @@
 			$this->setCreatedAt($xml_obj->{'created-at'});
 			$this->setUpdatedAt($xml_obj->{'updated-at'});
 			$this->setCompanyId($xml_obj->{'company-id'});
+
+			if (!empty($xml_obj->{'type'})) {
+				$this->setType($xml_obj->{'type'});
+			}
 			
 			$this->loadContactDataFromXMLObject($xml_obj->{'contact-data'});
 			$this->loadTagsFromXMLObject($xml_obj->{'tags'});	
@@ -2058,13 +2070,6 @@
 			{
 				foreach($xml_obj->{'subject_data'} as $field)
 				{
-					# print "INSIDE loading custom fields:\n";
-					# print_r($value);
-					# print "-----------------------------\n";
-
-					# $tag = new HighriseTag($value->{'id'}, $value->{'name'});
-					# $original_tags[$tag->getName()] = 1;	
-					# $this->addTag($tag);
 					$new_field = new HighriseCustomfield($field->{'id'}, $field->{'value'}, $field->{'subject_field_id'}, $field->{'subject_field_label'});
 					$this->original_customfields[$new_field->getSubjectFieldLabel()] = 1;
 					$this->addCustomfield($new_field);
@@ -2700,309 +2705,12 @@
 	{
 		private $highrise;
 
-		// shared between company and user
-
-		public $id;
-		public $author_id;
-		public $background;
-		public $created_at;
-		public $group_id;
-		public $owner_id;
-		public $type;  // either "Company" or "Person"
-		public $updated_at;
-		public $visible_to;
-		public $name;
-		public $avatar_url;
-
-
-		// user only.
-
-		public $company_id;
-		public $first_name;
-		public $last_name;
-		public $title;
-
-
-
-		public $category_id;
-		public $currency;
-		public $duration;
-		public $party_id;
-		public $price;
-		public $price_type;
-		public $responsible_party_id;
-		public $status;
-		public $status_changed_on;
-		public $parties;
-		public $party;
-		
 		public function __construct(HighriseAPI $highrise)
 		{
 			$this->account = $highrise->account;
 			$this->token = $highrise->token;
 			$this->debug = $highrise->debug;
 			$this->curl = curl_init();		
-		}
-
-		public function status_update($status)
-		{
-			$valid_status = array(
-				'pending',
-				'won',
-				'lost'
-			);
-			if (!in_array($status,$valid_status)) {
-				throw new Exception("'$status' is not a valid status type. Available status names: " . implode(", ", $valid_status));
-			}
-			$status_update_xml = "<status><name>$status</name></status>";
-			$response = $this->postDataWithVerb("/deals/" . $this->getId() . "/status.xml", $status_update_xml, "PUT");
-			$this->checkForErrors("Deals", 200);	
-			return true;
-		}
-		
-		public function save()
-		{
-			if ($this->getFrame() == null)
-				throw new Exception("You need to specify a valid time frame to save a task");
-
-			if ($this->id == null) // Create
-			{
-				$task_xml = $this->toXML();
-				$new_task_xml = $this->postDataWithVerb("/tasks.xml", $task_xml, "POST");
-				$this->checkForErrors("Task", 201);	
-				$this->loadFromXMLObject(simplexml_load_string($new_task_xml));
-				return true;
-			}
-			else
-			{
-				$task_xml = $this->toXML();
-				$new_task_xml = $this->postDataWithVerb("/tasks/" . $this->getId() . ".xml", $task_xml, "PUT");
-				$this->checkForErrors("Task", 200);	
-				return true;	
-			}
-		}
-		
-		public function delete()
-		{
-			$this->postDataWithVerb("/deals/" . $this->getId() . ".xml", "", "DELETE");
-			$this->checkForErrors("Task", 200);	
-			$this->deleted = true;
-		}
-		
-		public function assignToUser(HighriseUser $user)
-		{
-			$this->setOwnerId($user->getId());
-		}
-		
-		public function setOwnerId($owner_id)
-		{
-			$this->owner_id = (string)$owner_id;
-		}
-
-		public function getOwnerId()
-		{
-			return $this->owner_id;
-		}
-
-		
-		public function setAccountId($account_id)
-		{
-			$this->account_id = (string)$account_id;
-		}
-
-		public function getAccountId()
-		{
-			return $this->account_id;
-		}
-
-		public function setAuthorId($author_id)
-		{
-			$this->author_id = (string)$author_id;
-		}
-
-		public function getAuthorId()
-		{
-			return $this->author_id;
-		}
-
-		
-		
-		public function setBackground($background)
-		{
-			$this->background = (string)$background;
-		}
-
-		public function getBackground()
-		{
-			return $this->background;
-		}
-
-		
-		public function setCategoryId($category_id)
-		{
-			$this->category_id = (string)$category_id;
-		}
-
-		public function getCategoryId()
-		{
-			return $this->category_id;
-		}
-
-		
-		public function setCreatedAt($created_at)
-		{
-			$this->created_at = (string)$created_at;
-		}
-
-		public function getCreatedAt()
-		{
-			return $this->created_at;
-		}
-
-		
-		public function setCurrency($currency)
-		{
-			$this->currency = (string)$currency;
-		}
-
-		public function getCurrency()
-		{
-			return $this->currency;
-		}
-
-		public function setDuration($duration)
-		{
-			$this->duration = (string)$duration;
-		}
-
-		public function getDuration()
-		{
-			return $this->duration;
-		}
-
-		
-		public function setGroupId($group_id)
-		{
-			$this->group_id = (string)$group_id;
-		}
-
-		public function getGroupId()
-		{
-			return $this->group_id;
-		}
-
-		
-		public function setName($name)
-		{
-			$this->name = (string)$name;
-		}
-
-		public function getName()
-		{
-			return $this->name;
-		}
-
-		public function setPartyId($party_id)
-		{
-			$this->party_id = (string)$party_id;
-		}
-
-		public function getPartyId()
-		{
-			return $this->party_id;
-		}
-
-		
-		public function setPrice($price)
-		{
-			$this->price = (string)$price;
-		}
-
-		public function getPrice()
-		{
-			return $this->price;
-		}
-
-		
-		public function setPriceType($price_type)
-		{
-			$this->price_type = (string)$price_type;
-		}
-
-		public function getPriceType()
-		{
-			return $this->price_type;
-		}
-
-		
-		public function setResponsiblePartyId($responsible_party_id)
-		{
-			$this->responsible_party_id = (string)$responsible_party_id;
-		}
-
-		public function getResponsiblePartyId()
-		{
-			return $this->responsible_party_id;
-		}
-
-		public function setStatus($status)
-		{
-			$this->status = (string)$status;
-		}
-
-		public function getStatus()
-		{
-			return $this->status;
-		}
-
-		public function setStatusChangedOn($status_changed_on)
-		{
-			$this->status_changed_on = (string)$status_changed_on;
-		}
-
-		public function getStatusChangedOn()
-		{
-			return $this->status_changed_on;
-		}
-
-		public function setUpdatedAt($updated_at)
-		{
-			$this->updated_at = (string)$updated_at;
-		}
-
-		public function getUpdatedAt()
-		{
-			return $this->updated_at;
-		}
-
-		public function setVisibleTo($visible_to)
-		{
-			$this->visible_to = (string)$visible_to;
-		}
-
-		public function getVisibleTo()
-		{
-			return $this->visible_to;
-		}
-
-		public function setParties($parties)
-		{
-			$this->parties = (string)$parties;
-		}
-
-		public function getParties()
-		{
-			return $this->parties;
-		}
-
-		public function setParty($party)
-		{
-			$this->party = (string)$party;
-		}
-
-		public function getParty()
-		{
-			return $this->party;
 		}
 
 		public function toXML()
@@ -3039,31 +2747,36 @@
 			if ($this->debug)
 				print_r($xml_obj);
 
-			$this->setAccountId($xml_obj->{'account-id'});
-			$this->setAuthorId($xml_obj->{'author-id'});
-			$this->setBackground($xml_obj->{'background'});
-			$this->setCategoryId($xml_obj->{'category-id'});
-			$this->setCreatedAt($xml_obj->{'created-at'});
-			$this->setCurrency($xml_obj->{'currency'});
-			$this->setDuration($xml_obj->{'duration'});
-			$this->setGroupId($xml_obj->{'group-id'});
-			$this->setName($xml_obj->{'name'});
-			$this->setOwnerId($xml_obj->{'owner-id'});
-			$this->setPartyId($xml_obj->{'party-id'});
-			$this->setPrice($xml_obj->{'price'});
-			$this->setPriceType($xml_obj->{'price-type'});
-			$this->setResponsiblePartyId($xml_obj->{'responsible-party-id'});
-			$this->setStatus($xml_obj->{'status'});
-			$this->setStatusChangedOn($xml_obj->{'status-changed-on'});
-			$this->setUpdatedAt($xml_obj->{'updated-at'});
-			$this->setVisibleTo($xml_obj->{'visible-to'});
-			$this->setParties($xml_obj->{'parties'});
-			$this->setParty($xml_obj->{'party'});
-			return true;
+			if ($xml_obj->{'type'} == "Company") {
+                        	$company = new HighriseCompany($this->highrise);
+                        	$company->loadFromXMLObject($xml_object);
+                        	return $company;
+			} elseif ($xml_obj->{'type'} == "Person") {
+                        	$person = new HighrisePerson($this->highrise);
+                        	$person->loadFromXMLObject($xml_object);
+                        	return $person;
+			} else {
+				throw new Exception("Party type is not supported: " . $xml_obj->{'type'});
+			}
+
 		}
 
 	}
-	
-	
-	
+
+	class HighriseCompany extends HighrisePerson {
+
+		public $name;
+
+		function setName($name) {
+			$this->name = $name;
+		}
+		function getName() {
+			return $this->name;
+		}
+
+		function loadFromXMLObject($xml_object) {
+			$this->setName($xml_object->{'name'});
+			parent::loadFromXMLObject($xml_object);
+		}
+	}
 
