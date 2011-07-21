@@ -247,7 +247,7 @@
 			$ret = array();
 			foreach($xml_object->deal as $xml_deal)
 			{
-				print_r($xml_deal);
+				# print_r($xml_deal);
 				$deal = new HighriseDeal($this);
 				$deal->loadFromXMLObject($xml_deal);
 				$ret[] = $deal;
@@ -427,7 +427,6 @@
 			$this->checkForErrors("Custom Fields");
 			
 			$xml_object = simplexml_load_string($xml);			
-			print_r($xml_object);
 			$ret = array();
 			foreach($xml_object->{'subject-field'} as $cf)
 			{
@@ -1781,10 +1780,10 @@
 		public $emails;
 		
 		public function setType($type) {
-			$this->type = $type;
+			$this->type = (string)$type;
 		}
 		public function getType() {
-			return $this->type;
+			return (string)$this->type;
 		}
 
 		public function getEmailAddresses()
@@ -2375,10 +2374,12 @@
 		
 		public function __construct(HighriseAPI $highrise)
 		{
+			$this->highrise = $highrise;
 			$this->account = $highrise->account;
 			$this->token = $highrise->token;
 			$this->debug = $highrise->debug;
 			$this->curl = curl_init();		
+			$this->parties = array();
 		}
 
 		public function status_update($status)
@@ -2622,19 +2623,10 @@
 			return $this->visible_to;
 		}
 
-		public function setParties($parties)
-		{
-			$this->parties = (string)$parties;
-		}
-
+		// no set parties or party since they're "special"
 		public function getParties()
 		{
 			return $this->parties;
-		}
-
-		public function setParty($party)
-		{
-			$this->party = (string)$party;
 		}
 
 		public function getParty()
@@ -2694,9 +2686,29 @@
 			$this->setStatusChangedOn($xml_obj->{'status-changed-on'});
 			$this->setUpdatedAt($xml_obj->{'updated-at'});
 			$this->setVisibleTo($xml_obj->{'visible-to'});
-			$this->setParties($xml_obj->{'parties'});
-			$this->setParty($xml_obj->{'party'});
+
+			$this->loadPartiesFromXMLObject($xml_obj->{'parties'});
+			$this->loadPartyFromXMLObject($xml_obj->{'party'});
+
 			return true;
+		}
+
+
+		function loadPartyFromXMLObject($xml_obj) {
+
+			$party = new HighriseParty($this->highrise);
+			$this->party = $party->loadfromXMLObject($xml_obj);
+
+		}
+
+		function loadPartiesFromXMLObject($xml_obj) {
+			if (count($xml_obj->{'party'}) > 0) {
+				foreach($xml_obj->{'party'} as $party_obj) {
+					$new_party = new HighriseParty($this->highrise);
+					$this->parties[] = $new_party->loadFromXMLObject($party_obj);
+				}
+			}
+
 		}
 
 	}
@@ -2707,36 +2719,19 @@
 
 		public function __construct(HighriseAPI $highrise)
 		{
+			$this->highrise = $highrise;
 			$this->account = $highrise->account;
 			$this->token = $highrise->token;
 			$this->debug = $highrise->debug;
 			$this->curl = curl_init();		
 		}
 
+		// TODO
 		public function toXML()
 		{
 
 			$xml  = "<deal>\n";
 			$xml .= '  <account-id>' . $this->getAccountId() . "</account-id>\n";
-			$xml .= '  <author-id>' . $this->getAuthorId() . "</author-id>\n";
-			$xml .= '  <background>' . $this->getBackground() . "</background>\n";
-			$xml .= '  <category-id>' . $this->getCategoryId() . "</category-id>\n";
-			$xml .= '  <created-at>' . $this->getCreatedAt() . "</created-at>\n";
-			$xml .= '  <currency>' . $this->getCurrency() . "</currency>\n";
-			$xml .= '  <duration>' . $this->getDuration() . "</duration>\n";
-			$xml .= '  <group-id>' . $this->getGroupId() . "</group-id>\n";
-			$xml .= '  <name>' . $this->getName() . "</name>\n";
-			$xml .= '  <owner-id>' . $this->getOwnerId() . "</owner-id>\n";
-			$xml .= '  <party-id>' . $this->getPartyId() . "</party-id>\n";
-			$xml .= '  <price>' . $this->getPrice() . "</price>\n";
-			$xml .= '  <price-type>' . $this->getPriceType() . "</price-typen";
-			$xml .= '  <responsible-party-id>' . $this->getResponsiblePartyId() . "</responsible-party-id>\n";
-			$xml .= '  <status>' . $this->getStatus() . "</status>\n";
-			$xml .= '  <status-changed-on>' . $this->getStatusChangedOn() . "</status-changed-on>\n";
-			$xml .= '  <updated-at>' . $this->getUpdatedAt() . "</updated-at>\n";
-			$xml .= '  <visibile-to>' . $this->getVisibleTo() . "</visible-to>\n";
-			$xml .= '  <parties>' . $this->getParties() . "</parties>\n";
-			$xml .= '  <party>' . $this->getParty() . "</party>\n";
 			$xml .= '</deal>';
 			return $xml;
 		}		
@@ -2749,11 +2744,11 @@
 
 			if ($xml_obj->{'type'} == "Company") {
                         	$company = new HighriseCompany($this->highrise);
-                        	$company->loadFromXMLObject($xml_object);
+                        	$company->loadFromXMLObject($xml_obj);
                         	return $company;
 			} elseif ($xml_obj->{'type'} == "Person") {
                         	$person = new HighrisePerson($this->highrise);
-                        	$person->loadFromXMLObject($xml_object);
+                        	$person->loadFromXMLObject($xml_obj);
                         	return $person;
 			} else {
 				throw new Exception("Party type is not supported: " . $xml_obj->{'type'});
