@@ -2758,6 +2758,7 @@
 
 	}
 
+	// company barely differs from a person in that it just uses a "name" instead of a split "firstname" and "lastname"
 	class HighriseCompany extends HighrisePerson {
 
 		public $name;
