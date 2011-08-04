@@ -289,26 +289,26 @@
 		{
 
 			$xml  = "<deal>\n";
-			$xml .= '  <account-id>' . $this->getAccountId() . "</account-id>\n";
-			$xml .= '  <author-id>' . $this->getAuthorId() . "</author-id>\n";
+			$xml .= '  <account-id type="integer">' . $this->getAccountId() . "</account-id>\n";
+			$xml .= '  <author-id type="integer">' . $this->getAuthorId() . "</author-id>\n";
 			$xml .= '  <background>' . $this->getBackground() . "</background>\n";
-			$xml .= '  <category-id>' . $this->getCategoryId() . "</category-id>\n";
-			$xml .= '  <created-at>' . $this->getCreatedAt() . "</created-at>\n";
+			$xml .= '  <category-id type="integer">' . $this->getCategoryId() . "</category-id>\n";
+			$xml .= '  <created-at type="datetime">' . $this->getCreatedAt() . "</created-at>\n";
 			$xml .= '  <currency>' . $this->getCurrency() . "</currency>\n";
-			$xml .= '  <duration>' . $this->getDuration() . "</duration>\n";
-			$xml .= '  <group-id>' . $this->getGroupId() . "</group-id>\n";
+			$xml .= '  <duration type="integer">' . $this->getDuration() . "</duration>\n";
+			$xml .= '  <group-id type="integer">' . $this->getGroupId() . "</group-id>\n";
 			$xml .= '  <name>' . $this->getName() . "</name>\n";
-			$xml .= '  <owner-id>' . $this->getOwnerId() . "</owner-id>\n";
-			$xml .= '  <party-id>' . $this->getPartyId() . "</party-id>\n";
-			$xml .= '  <price>' . $this->getPrice() . "</price>\n";
+			$xml .= '  <owner-id type="integer">' . $this->getOwnerId() . "</owner-id>\n";
+			$xml .= '  <party-id type="integer">' . $this->getPartyId() . "</party-id>\n";
+			$xml .= '  <price type="integer">' . $this->getPrice() . "</price>\n";
 			$xml .= '  <price-type>' . $this->getPriceType() . "</price-typen";
-			$xml .= '  <responsible-party-id>' . $this->getResponsiblePartyId() . "</responsible-party-id>\n";
+			$xml .= '  <responsible-party-id type="integer">' . $this->getResponsiblePartyId() . "</responsible-party-id>\n";
 			$xml .= '  <status>' . $this->getStatus() . "</status>\n";
-			$xml .= '  <status-changed-on>' . $this->getStatusChangedOn() . "</status-changed-on>\n";
-			$xml .= '  <updated-at>' . $this->getUpdatedAt() . "</updated-at>\n";
+			$xml .= '  <status-changed-on type="date">' . $this->getStatusChangedOn() . "</status-changed-on>\n";
+			$xml .= '  <updated-at type="datetime">' . $this->getUpdatedAt() . "</updated-at>\n";
 			$xml .= '  <visibile-to>' . $this->getVisibleTo() . "</visible-to>\n";
-			$xml .= '  <parties>' . $this->getParties() . "</parties>\n";
-			$xml .= '  <party>' . $this->getParty() . "</party>\n";
+			# $xml .= '  <parties>' . $this->getParties() . "</parties>\n";
+			# $xml .= '  <party>' . $this->getParty() . "</party>\n";
 			$xml .= '</deal>';
 			return $xml;
 		}		
