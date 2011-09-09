@@ -9,9 +9,11 @@
 		public $background;
 		public $category_id;
 		public $created_at;
+		public $updated_at;
 		public $currency;
 		public $duration;
 		public $group_id;
+		public $visible_to;
 		public $name;
 		public $owner_id;
 		public $party_id;
@@ -20,7 +22,7 @@
 		public $responsible_party_id;
 		public $status;
 		public $status_changed_on;
-		public $parties;
+		// public $parties;
 		public $party;
 		
 		public function __construct(HighriseAPI $highrise)
@@ -30,7 +32,8 @@
 			$this->token = $highrise->token;
 			$this->debug = $highrise->debug;
 			$this->curl = curl_init();		
-			$this->parties = array();
+			// $this->parties = array();
+
 		}
 
 		public function status_update($status)
@@ -51,21 +54,28 @@
 		
 		public function save()
 		{
-			if ($this->getFrame() == null)
-				throw new Exception("You need to specify a valid time frame to save a task");
+			if ($this->getName() == null)
+				throw new Exception("getName() returned null, you cannot save a deal without the name");
 
 			if ($this->id == null) // Create
 			{
-				$task_xml = $this->toXML();
-				$new_task_xml = $this->postDataWithVerb("/tasks.xml", $task_xml, "POST");
-				$this->checkForErrors("Task", 201);	
-				$this->loadFromXMLObject(simplexml_load_string($new_task_xml));
+				$deal_xml = $this->toXML();
+				# $deal_xml = "<deal>\n\t<name>New Deal</name>\n</deal>\n";
+					
+				print_r($deal_xml);
+				
+				$new_deal_xml = $this->postDataWithVerb("/deals.xml", $deal_xml, "POST");
+				print_r($new_deal_xml);
+				exit;
+				
+				$this->checkForErrors("Deal", 201);	
+				$this->loadFromXMLObject(simplexml_load_string($new_deal_xml));
 				return true;
 			}
 			else
 			{
-				$task_xml = $this->toXML();
-				$new_task_xml = $this->postDataWithVerb("/tasks/" . $this->getId() . ".xml", $task_xml, "PUT");
+				$deal_xml = $this->toXML();
+				$new_deal_xml = $this->postDataWithVerb("/deals/" . $this->getId() . ".xml", $deal_xml, "PUT");
 				$this->checkForErrors("Task", 200);	
 				return true;	
 			}
@@ -138,6 +148,7 @@
 		}
 
 		
+		// this shouldn't really be a function...
 		public function setCreatedAt($created_at)
 		{
 			$this->created_at = (string)$created_at;
@@ -149,7 +160,7 @@
 		}
 
 		
-		public function setCurrency($currency)
+		public function setCurrency($currency = 'USD')
 		{
 			$this->currency = (string)$currency;
 		}
@@ -215,7 +226,13 @@
 		
 		public function setPriceType($price_type)
 		{
+			$valid_price_types = array("fixed", "hour", "month", "year");
+			$price_type = strtolower($price_type);
+			if ($price_type != null && !in_array($price_type, $valid_price_types)) {
+				throw new Exception("$price_type is not a valid price type. Available price types: " . implode(", ", $valid_price_types));
+			}
 			$this->price_type = (string)$price_type;
+
 		}
 
 		public function getPriceType()
@@ -236,7 +253,13 @@
 
 		public function setStatus($status)
 		{
+			$valid_statuses = array("pending", "won", "lost");
+			$status = strtolower($status);
+			if ($status != null && !in_array($status, $valid_statuses)) {
+				throw new Exception("$status is not a valid status. Available statuses: " . implode(", ", $valid_statuses));
+			}
 			$this->status = (string)$status;
+
 		}
 
 		public function getStatus()
@@ -244,6 +267,7 @@
 			return $this->status;
 		}
 
+		// TODO:  shouldn't be a function.
 		public function setStatusChangedOn($status_changed_on)
 		{
 			$this->status_changed_on = (string)$status_changed_on;
@@ -254,6 +278,7 @@
 			return $this->status_changed_on;
 		}
 
+		// TODO:  shouldn't be a function.
 		public function setUpdatedAt($updated_at)
 		{
 			$this->updated_at = (string)$updated_at;
@@ -266,6 +291,11 @@
 
 		public function setVisibleTo($visible_to)
 		{
+			$valid_permissions = array("Everyone", "Owner");
+			$visible_to = ucwords(strtolower($visible_to));
+			if ($visible_to != null && !in_array($visible_to, $valid_permissions)) {
+				throw new Exception("$visible_to is not a valid visibility permission. Available visibility permissions: " . implode(", ", $valid_permissions));
+			}
 			$this->visible_to = (string)$visible_to;
 		}
 
@@ -275,10 +305,12 @@
 		}
 
 		// no set parties or party since they're "special"
+		/*
 		public function getParties()
 		{
 			return $this->parties;
 		}
+		*/
 
 		public function getParty()
 		{
@@ -289,26 +321,68 @@
 		{
 
 			$xml  = "<deal>\n";
-			$xml .= '  <account-id type="integer">' . $this->getAccountId() . "</account-id>\n";
-			$xml .= '  <author-id type="integer">' . $this->getAuthorId() . "</author-id>\n";
-			$xml .= '  <background>' . $this->getBackground() . "</background>\n";
-			$xml .= '  <category-id type="integer">' . $this->getCategoryId() . "</category-id>\n";
-			$xml .= '  <created-at type="datetime">' . $this->getCreatedAt() . "</created-at>\n";
-			$xml .= '  <currency>' . $this->getCurrency() . "</currency>\n";
-			$xml .= '  <duration type="integer">' . $this->getDuration() . "</duration>\n";
-			$xml .= '  <group-id type="integer">' . $this->getGroupId() . "</group-id>\n";
+
+			if ($this->getName() == null) {
+				throw new Exception("HighriseDeals::getName returned null which is invalid inside of toXML.  Name is required for a deal");
+			}
+
 			$xml .= '  <name>' . $this->getName() . "</name>\n";
-			$xml .= '  <owner-id type="integer">' . $this->getOwnerId() . "</owner-id>\n";
-			$xml .= '  <party-id type="integer">' . $this->getPartyId() . "</party-id>\n";
-			$xml .= '  <price type="integer">' . $this->getPrice() . "</price>\n";
-			$xml .= '  <price-type>' . $this->getPriceType() . "</price-typen";
-			$xml .= '  <responsible-party-id type="integer">' . $this->getResponsiblePartyId() . "</responsible-party-id>\n";
-			$xml .= '  <status>' . $this->getStatus() . "</status>\n";
-			$xml .= '  <status-changed-on type="date">' . $this->getStatusChangedOn() . "</status-changed-on>\n";
-			$xml .= '  <updated-at type="datetime">' . $this->getUpdatedAt() . "</updated-at>\n";
-			$xml .= '  <visibile-to>' . $this->getVisibleTo() . "</visible-to>\n";
+
+			if ($this->getAccountId() != null) {
+				$xml .= '  <account-id type="integer">' . $this->getAccountId() . "</account-id>\n";
+			}
+			if ($this->getAuthorId() != null) {
+				$xml .= '  <author-id type="integer">' . $this->getAuthorId() . "</author-id>\n";
+			}
+			if ($this->getBackground() != null) {
+				$xml .= '  <background>' . $this->getBackground() . "</background>\n";
+			}
+			if ($this->getCategoryId() != null) {
+				$xml .= '  <category-id type="integer">' . $this->getCategoryId() . "</category-id>\n";
+			}
+			if ($this->getCreatedAt() != null) {
+				$xml .= '  <created-at type="datetime">' . $this->getCreatedAt() . "</created-at>\n";
+			}
+			if ($this->getCurrency() != null) {
+				$xml .= '  <currency>' . $this->getCurrency() . "</currency>\n";
+			}
+			if ($this->getDuration() != null) {
+				$xml .= '  <duration type="integer">' . $this->getDuration() . "</duration>\n";
+			}
+			if ($this->getGroupId() != null) {
+				$xml .= '  <group-id type="integer">' . $this->getGroupId() . "</group-id>\n";
+			}
+			if ($this->getOwnerId() != null) {
+				$xml .= '  <owner-id type="integer">' . $this->getOwnerId() . "</owner-id>\n";
+			}
+			if ($this->getPartyId() != null) {
+				$xml .= '  <party-id type="integer">' . $this->getPartyId() . "</party-id>\n";
+			}
+			if ($this->getPrice() != null) {
+				$xml .= '  <price type="integer">' . $this->getPrice() . "</price>\n";
+			}
+			if ($this->getPriceType() != null) {
+				$xml .= '  <price-type>' . $this->getPriceType() . "</price-typen";
+			}
+			if ($this->getResponsiblePartyId() != null) {
+				$xml .= '  <responsible-party-id type="integer">' . $this->getResponsiblePartyId() . "</responsible-party-id>\n";
+			}
+			if ($this->getStatus() != null) {
+				$xml .= '  <status>' . $this->getStatus() . "</status>\n";
+			}
+			if ($this->getStatusChangedOn() != null) {
+				$xml .= '  <status-changed-on type="date">' . $this->getStatusChangedOn() . "</status-changed-on>\n";
+			}
+			if ($this->getUpdatedAt() != null) {
+				$xml .= '  <updated-at type="datetime">' . $this->getUpdatedAt() . "</updated-at>\n";
+			}
+			if ($this->getVisibleTo() != null) {
+				$xml .= '  <visibile-to>' . $this->getVisibleTo() . "</visible-to>\n";
+			}
 			# $xml .= '  <parties>' . $this->getParties() . "</parties>\n";
-			# $xml .= '  <party>' . $this->getParty() . "</party>\n";
+			if (is_object($this->party)) {
+				$xml .= $this->party->toXML();
+			}
 			$xml .= '</deal>';
 			return $xml;
 		}		
@@ -337,8 +411,7 @@
 			$this->setStatusChangedOn($xml_obj->{'status-changed-on'});
 			$this->setUpdatedAt($xml_obj->{'updated-at'});
 			$this->setVisibleTo($xml_obj->{'visible-to'});
-
-			$this->loadPartiesFromXMLObject($xml_obj->{'parties'});
+			// $this->loadPartiesFromXMLObject($xml_obj->{'parties'});
 			$this->loadPartyFromXMLObject($xml_obj->{'party'});
 
 			return true;
@@ -347,11 +420,14 @@
 
 		function loadPartyFromXMLObject($xml_obj) {
 
-			$party = new HighriseParty($this->highrise);
-			$this->party = $party->loadfromXMLObject($xml_obj);
+			if ($xml_obj != null) {
+				$this->party = new HighriseParty($this->highrise);
+				$this->party->loadfromXMLObject($xml_obj);
+			}
 
 		}
 
+/*
 		function loadPartiesFromXMLObject($xml_obj) {
 			if (count($xml_obj->{'party'}) > 0) {
 				foreach($xml_obj->{'party'} as $party_obj) {
@@ -361,6 +437,7 @@
 			}
 
 		}
+*/
 
 	}
 	

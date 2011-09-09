@@ -140,7 +140,7 @@
 		
 		public function save()
 		{
-			$person_xml = $this->toXML(false);
+			$person_xml = $this->toXML();
 			if ($this->getId() != null)
 			{
 				$new_xml = $this->postDataWithVerb("/people/" . $this->getId() . ".xml?reload=true", $person_xml, "PUT");
@@ -237,18 +237,22 @@
 			}
 		}
 			
-		public function toXML($with_id = true)
+		public function toXML($include_header = true)
 		{
-			$xml[] = "<person>";
+			if ($include_header == true) {
+				$xml[] = "<person>";
+			}
 			
-			// TODO: Update company_id
-			// TODO: Get Company Id
-			$fields = array("title", "first_name", "last_name", "background", "visible_to");
+			$fields = array("title", "first_name", "last_name", "background", "visible_to", "type");
 			
-			
-			if ($this->getId() != null)
+			if ($this->getId() != null) {
 				$xml[] = '<id type="integer">' . $this->getId() . '</id>';
-			
+			}
+
+			$xml[] = '<company-id type="integer">' . $this->getCompanyId() . '</company-id>';
+			$xml[] = '<created-at type="datetime">' . $this->getCreatedAt() . '</created-at>';
+			$xml[] = '<updated-at type="datetime">' . $this->getUpdatedAt() . '</updated-at>';
+
 			$optional_fields = array("company_name");
 				
 			foreach($fields as $field)
@@ -288,7 +292,9 @@
 			}
 			$xml[] = "</contact-data>";
 			
-			$xml[] = "</person>";
+			if ($include_header == true) {
+				$xml[] = "</person>";
+			}
 
 			return implode("\n", $xml);		
 		}

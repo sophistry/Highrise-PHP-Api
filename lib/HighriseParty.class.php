@@ -3,6 +3,9 @@
 	class HighriseParty extends HighriseAPI
 	{
 		private $highrise;
+		public $type;
+		public $company;
+		public $person;
 
 		public function __construct(HighriseAPI $highrise)
 		{
@@ -16,27 +19,34 @@
 		// TODO
 		public function toXML()
 		{
+			$xml = "<party>\n";
 
-			$xml  = "<deal>\n";
-			$xml .= '  <account-id>' . $this->getAccountId() . "</account-id>\n";
-			$xml .= '</deal>';
+			if ($this->type == "Company") {
+				$xml .= $this->company->toXML(false);
+			} elseif ($this->type == "Person") {
+				$xml .= $this->person->toXML(false);
+			} else {
+				throw new Exception("Party type is not supported: " . $xml_obj->{'type'});
+			}
+
+			$xml .= "</party>\n";
 			return $xml;
 		}		
 		
 		public function loadFromXMLObject($xml_obj)
 		{
-	
+
 			if ($this->debug)
 				print_r($xml_obj);
 
 			if ($xml_obj->{'type'} == "Company") {
-                        	$company = new HighriseCompany($this->highrise);
-                        	$company->loadFromXMLObject($xml_obj);
-                        	return $company;
+				$this->type = "Company";
+                        	$this->company = new HighriseCompany($this->highrise);
+                        	$this->company->loadFromXMLObject($xml_obj);
 			} elseif ($xml_obj->{'type'} == "Person") {
-                        	$person = new HighrisePerson($this->highrise);
-                        	$person->loadFromXMLObject($xml_obj);
-                        	return $person;
+				$this->type = "Person";
+                        	$this->person = new HighrisePerson($this->highrise);
+                        	$this->person->loadFromXMLObject($xml_obj);
 			} else {
 				throw new Exception("Party type is not supported: " . $xml_obj->{'type'});
 			}

@@ -7,16 +7,33 @@ require_once('HighrisePerson.class.php');
 
 		public $name;
 
-		function setName($name) {
-			$this->name = $name;
+		public function setName($name) {
+			$this->name = (string)$name;
 		}
-		function getName() {
+		public function getName() {
 			return $this->name;
 		}
 
-		function loadFromXMLObject($xml_object) {
+		public function loadFromXMLObject($xml_object) {
 			$this->setName($xml_object->{'name'});
 			parent::loadFromXMLObject($xml_object);
 		}
-	}
 
+		public function toXML($include_header = true)
+		{
+
+			$xml = '';
+			if ($include_header == true) {
+				$xml = "<company>";
+			}
+
+			$xml .= "the xml goes here";
+			# $xml .= parent::toXML(false) . "\n";
+
+			if ($include_header == true) {
+				$xml .= "</company";
+			}
+
+			return $xml;
+		}
+	}
