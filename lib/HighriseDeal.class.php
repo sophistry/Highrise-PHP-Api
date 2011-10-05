@@ -60,14 +60,7 @@
 			if ($this->id == null) // Create
 			{
 				$deal_xml = $this->toXML();
-				# $deal_xml = "<deal>\n\t<name>New Deal</name>\n</deal>\n";
-					
-				print_r($deal_xml);
-				
 				$new_deal_xml = $this->postDataWithVerb("/deals.xml", $deal_xml, "POST");
-				print_r($new_deal_xml);
-				exit;
-				
 				$this->checkForErrors("Deal", 201);	
 				$this->loadFromXMLObject(simplexml_load_string($new_deal_xml));
 				return true;
@@ -76,7 +69,7 @@
 			{
 				$deal_xml = $this->toXML();
 				$new_deal_xml = $this->postDataWithVerb("/deals/" . $this->getId() . ".xml", $deal_xml, "PUT");
-				$this->checkForErrors("Task", 200);	
+				$this->checkForErrors("Deal", 200);	
 				return true;	
 			}
 		}
@@ -92,7 +85,17 @@
 		{
 			$this->setOwnerId($user->getId());
 		}
-		
+
+		public function setDealId($deal_id)
+		{
+			$this->id = (string)$deal_id;
+		}
+
+		public function getDealId()
+		{
+			return $this->id;
+		}
+
 		public function setOwnerId($owner_id)
 		{
 			$this->owner_id = (string)$owner_id;
@@ -393,6 +396,7 @@
 			if ($this->debug)
 				print_r($xml_obj);
 
+			$this->setDealId($xml_obj->{'id'});
 			$this->setAccountId($xml_obj->{'account-id'});
 			$this->setAuthorId($xml_obj->{'author-id'});
 			$this->setBackground($xml_obj->{'background'});
