@@ -239,6 +239,7 @@
 			
 		public function toXML($include_header = true)
 		{
+
 			if ($include_header == true) {
 				$xml[] = "<person>";
 			}
@@ -246,12 +247,12 @@
 			$fields = array("title", "first_name", "last_name", "background", "visible_to", "type");
 			
 			if ($this->getId() != null) {
-				$xml[] = '<id type="integer">' . $this->getId() . '</id>';
+				$xml[] = "\t" . '<id type="integer">' . $this->getId() . '</id>';
 			}
 
-			$xml[] = '<company-id type="integer">' . $this->getCompanyId() . '</company-id>';
-			$xml[] = '<created-at type="datetime">' . $this->getCreatedAt() . '</created-at>';
-			$xml[] = '<updated-at type="datetime">' . $this->getUpdatedAt() . '</updated-at>';
+			$xml[] = "\t" . '<company-id type="integer">' . $this->getCompanyId() . '</company-id>';
+			$xml[] = "\t" . '<created-at type="datetime">' . $this->getCreatedAt() . '</created-at>';
+			$xml[] = "\t" . '<updated-at type="datetime">' . $this->getUpdatedAt() . '</updated-at>';
 
 			$optional_fields = array("company_name");
 				

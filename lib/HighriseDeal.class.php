@@ -57,21 +57,18 @@
 			if ($this->getName() == null)
 				throw new Exception("getName() returned null, you cannot save a deal without the name");
 
-			if ($this->id == null) // Create
-			{
-				$deal_xml = $this->toXML();
+			$deal_xml = $this->toXML();
+
+			if ($this->id == null) {
+
 				$new_deal_xml = $this->postDataWithVerb("/deals.xml", $deal_xml, "POST");
 				$this->checkForErrors("Deal", 201);	
 				$this->loadFromXMLObject(simplexml_load_string($new_deal_xml));
-				return true;
-			}
-			else
-			{
-				$deal_xml = $this->toXML();
+			} else {
 				$new_deal_xml = $this->postDataWithVerb("/deals/" . $this->getId() . ".xml", $deal_xml, "PUT");
 				$this->checkForErrors("Deal", 200);	
-				return true;	
 			}
+			return true;	
 		}
 		
 		public function delete()
@@ -86,12 +83,12 @@
 			$this->setOwnerId($user->getId());
 		}
 
-		public function setDealId($deal_id)
+		public function setId($deal_id)
 		{
 			$this->id = (string)$deal_id;
 		}
 
-		public function getDealId()
+		public function getId()
 		{
 			return $this->id;
 		}
@@ -329,8 +326,6 @@
 				throw new Exception("HighriseDeals::getName returned null which is invalid inside of toXML.  Name is required for a deal");
 			}
 
-			$xml .= '  <name>' . $this->getName() . "</name>\n";
-
 			if ($this->getAccountId() != null) {
 				$xml .= '  <account-id type="integer">' . $this->getAccountId() . "</account-id>\n";
 			}
@@ -342,7 +337,7 @@
 			}
 			if ($this->getCategoryId() != null) {
 				$xml .= '  <category-id type="integer">' . $this->getCategoryId() . "</category-id>\n";
-			}
+			} 
 			if ($this->getCreatedAt() != null) {
 				$xml .= '  <created-at type="datetime">' . $this->getCreatedAt() . "</created-at>\n";
 			}
@@ -355,6 +350,14 @@
 			if ($this->getGroupId() != null) {
 				$xml .= '  <group-id type="integer">' . $this->getGroupId() . "</group-id>\n";
 			}
+
+			if ($this->getId() != null) {
+				$xml .= '  <id type="integer">' . $this->getId() . "</id>\n";
+			}
+
+			$xml .= '  <name>' . $this->getName() . "</name>\n";
+
+
 			if ($this->getOwnerId() != null) {
 				$xml .= '  <owner-id type="integer">' . $this->getOwnerId() . "</owner-id>\n";
 			}
@@ -365,7 +368,7 @@
 				$xml .= '  <price type="integer">' . $this->getPrice() . "</price>\n";
 			}
 			if ($this->getPriceType() != null) {
-				$xml .= '  <price-type>' . $this->getPriceType() . "</price-typen";
+				$xml .= '  <price-type>' . $this->getPriceType() . "</price-type>\n";
 			}
 			if ($this->getResponsiblePartyId() != null) {
 				$xml .= '  <responsible-party-id type="integer">' . $this->getResponsiblePartyId() . "</responsible-party-id>\n";
@@ -380,12 +383,13 @@
 				$xml .= '  <updated-at type="datetime">' . $this->getUpdatedAt() . "</updated-at>\n";
 			}
 			if ($this->getVisibleTo() != null) {
-				$xml .= '  <visibile-to>' . $this->getVisibleTo() . "</visible-to>\n";
+				$xml .= '  <visible-to>' . $this->getVisibleTo() . "</visible-to>\n";
 			}
 			# $xml .= '  <parties>' . $this->getParties() . "</parties>\n";
 			if (is_object($this->party)) {
 				$xml .= $this->party->toXML();
 			}
+			$xml .= '  <parties type="array"/>' . "\n";
 			$xml .= '</deal>';
 			return $xml;
 		}		
@@ -396,13 +400,17 @@
 			if ($this->debug)
 				print_r($xml_obj);
 
-			$this->setDealId($xml_obj->{'id'});
+			$this->setId($xml_obj->{'id'});
 			$this->setAccountId($xml_obj->{'account-id'});
 			$this->setAuthorId($xml_obj->{'author-id'});
 			$this->setBackground($xml_obj->{'background'});
 			$this->setCategoryId($xml_obj->{'category-id'});
 			$this->setCreatedAt($xml_obj->{'created-at'});
-			$this->setCurrency($xml_obj->{'currency'});
+			if (empty($xml_obj->{'currency'})) {
+				$this->setCurrency("USD");
+			} else {
+				$this->setCurrency($xml_obj->{'currency'});
+			}
 			$this->setDuration($xml_obj->{'duration'});
 			$this->setGroupId($xml_obj->{'group-id'});
 			$this->setName($xml_obj->{'name'});

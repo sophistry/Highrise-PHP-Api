@@ -19,6 +19,10 @@
 		// TODO
 		public function toXML()
 		{
+			if (empty($this->type)) {
+				return "";
+			}
+
 			$xml = "<party>\n";
 
 			if ($this->type == "Company") {
@@ -26,7 +30,7 @@
 			} elseif ($this->type == "Person") {
 				$xml .= $this->person->toXML(false);
 			} else {
-				throw new Exception("Party type is not supported: " . $xml_obj->{'type'});
+				throw new Exception("Party type is not supported: " . $this->type);
 			}
 
 			$xml .= "</party>\n";
@@ -36,8 +40,13 @@
 		public function loadFromXMLObject($xml_obj)
 		{
 
-			if ($this->debug)
+			if ($this->debug) {
 				print_r($xml_obj);
+			}
+
+			if (empty($xml_obj->{'type'})) {
+				return false;
+			}
 
 			if ($xml_obj->{'type'} == "Company") {
 				$this->type = "Company";
