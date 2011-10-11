@@ -176,6 +176,21 @@ require_once('HighriseWebAddress.class.php');
 			
 			return $ret;
 		}
+
+		public function findUserByEmail($email)
+		{
+
+			$users = $this->findAllUsers();
+
+			$foundusers = array();
+			foreach ($users as $user) {
+				if (strtolower(trim($email)) == strtolower(trim($user->email_address))) {
+					return $user;
+				}
+			} 
+			
+			return false;
+		}
 		
 		public function findMe()
 		{
