@@ -15,6 +15,9 @@ Features currently implemented:
 * Tags
 * Users
 
+* Deals
+* CustomFields
+
 
 Examples
 ========

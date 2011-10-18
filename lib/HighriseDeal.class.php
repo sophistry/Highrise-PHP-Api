@@ -61,7 +61,9 @@
 
 			if ($this->id == null) {
 
+				print $deal_xml;
 				$new_deal_xml = $this->postDataWithVerb("/deals.xml", $deal_xml, "POST");
+				print $new_deal_xml;
 				$this->checkForErrors("Deal", 201);	
 				$this->loadFromXMLObject(simplexml_load_string($new_deal_xml));
 			} else {
@@ -389,7 +391,7 @@
 			if (is_object($this->party)) {
 				$xml .= $this->party->toXML();
 			}
-			$xml .= '  <parties type="array"/>' . "\n";
+			# $xml .= '  <parties type="array"/>' . "\n";
 			$xml .= '</deal>';
 			return $xml;
 		}		
