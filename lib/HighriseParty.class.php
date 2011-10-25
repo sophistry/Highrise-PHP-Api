@@ -4,8 +4,6 @@
 	{
 		private $highrise;
 		public $type;
-		public $company;
-		public $person;
 
 		public function __construct(HighriseAPI $highrise)
 		{
