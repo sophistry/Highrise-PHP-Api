@@ -29,8 +29,7 @@
 				throw new Exception("Subject Type and Subject ID must be set in order to create a new " . $this->_note_type);
 			}
 
-			if ($this->id == null) // Create
-			{
+			if ($this->id == null) { // Create
 				$note_xml = $this->toXML();
 				$new_xml = $this->postDataWithVerb($this->_note_url . ".xml", $note_xml, "POST");
 				$this->checkForErrors(ucwords($this->_note_type), 201);	
@@ -185,33 +184,24 @@
 			$this->_note_type = "note";
 			$this->_note_url = "/notes";
 		}
-		
+
 		public function toXML()
 		{
-			$xml = "<" . $this->_note_type . ">\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
-			
-			if ($this->author_id)
-				$xml .= '<author-id>' . $this->getAuthorId() . "</author-id>\n";
-			
-			$xml .= '<body>' . $this->getBody() . "</body>\n";
-			
-			if ($this->owner_id)
-				$xml .= '<owner-id>' . $this->getOwnerId() . "</owner-id>\n";
-			
-			$xml .= '<subject-id>' . $this->getSubjectId() . "</subject-id>\n";
-			$xml .= '<subject-type>' . $this->getSubjectType() . "</subject-type>\n";
-			$xml .= '<visible-to>' . $this->getVisibleTo() . "</visible-to>\n";
-			
-			if (isset($this->title)) // Email
-				$xml .= '<title>' . $this->getTitle() . "</title>\n";
-			
-			// $xml .= '<subject-name>' . $this->getSubjectName() . "</subject-name>\n";
-			
-			$xml .= "</" . $this->_note_type . ">\n";
-			return $xml;
+
+			$note = new SimpleXMLElement("<" . $this->_note_type . "></" . $this->_note_type .">");
+
+			$note->addChild("id",$this->getId());
+			$note->id->addAttribute("type","integer");
+			$note->addChild("author-id",$this->getAuthorId());
+			$note->addChild("body",$this->getBody());
+			$note->addChild("owner-id",$this->getOwnerId());
+			$note->addChild("subject-id",$this->getSubjectId());
+			$note->addChild("subject-type",$this->getSubjectType());
+			$note->addChild("visible-to",$this->getVisibleTo());
+
+			return $note->asXML();
 		}
+
 		
 		public function __toString()
 		{
