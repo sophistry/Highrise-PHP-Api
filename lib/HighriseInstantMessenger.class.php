@@ -16,14 +16,15 @@
 		
 		public function toXML()
 		{
-			$xml = "<instant-messenger>\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
-			$xml .= '<protocol>' . $this->getProtocol() . "</protocol>\n";
-			$xml .= '<location>' . $this->getLocation() . "</location>\n";
-			$xml .= '<address>' . $this->getAddress() . "</address>\n";
-			$xml .= "</instant-messenger>\n";
-			return $xml;
+
+
+                        $xml = new SimpleXMLElement("<instant-messenger></instant-messenger>");
+                        $xml->addChild("id",$this->getId());
+                        $xml->id->addAttribute("type","integer");
+                        $xml->addChild("protocol",$this->getProtocol());
+                        $xml->addChild("location",$this->getLocation());
+                        $xml->addChild("address",$this->getAddress());
+			return $xml->asXML();
 		}
 		
 		public function __toString()

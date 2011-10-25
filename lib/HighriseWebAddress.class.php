@@ -8,13 +8,14 @@
 		
 		public function toXML()
 		{
-			$xml = "<web-address>\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
-			$xml .= '<location>' . $this->getLocation() . "</location>\n";
-			$xml .= '<url>' . $this->getUrl() . "</url>\n";
-			$xml .= "</web-address>\n";
-			return $xml;
+
+                        $xml = new SimpleXMLElement("<web-address></web-address>");
+                        $xml->addChild("id",$this->getId());
+                        $xml->id->addAttribute("type","integer");
+                        $xml->addChild("location",$this->getLocation());
+                        $xml->addChild("url",$this->getUrl());
+
+			return $xml->asXML;
 		}
 		
 		public function __construct($id = null, $url = null, $location = null)

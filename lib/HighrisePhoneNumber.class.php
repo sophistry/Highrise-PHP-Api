@@ -15,13 +15,13 @@
 		
 		public function toXML()
 		{
-			$xml = "<phone-number>\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
-			$xml .= '<number>' . $this->getNumber() . "</number>\n";
-			$xml .= '<location>' . $this->getLocation() . "</location>\n";
-			$xml .= "</phone-number>\n";
-			return $xml;
+
+                        $xml = new SimpleXMLElement("<phone-number></phone-number>");
+                        $xml->addChild("id",$this->getId());
+                        $xml->id->addAttribute("type","integer");
+                        $xml->addChild("number",$this->getNumber());
+                        $xml->addChild("location",$this->getLocation());
+			return $xml->asXML();
 		}
 				
 		public function setLocation ($location)

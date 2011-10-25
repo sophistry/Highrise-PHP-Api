@@ -255,44 +255,25 @@
 		
 		public function toXML()
 		{
-			$xml = "<task>\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
 
-			if ($this->getRecordingId() != null)
-			{
-				$xml .= '<recording-id>' . $this->getSubjectId() . "</subject-id>\n";
-			}
-			
-			if ($this->getSubjectId() != null)
-			{
-				$xml .= '<subject-id>' . $this->getSubjectId() . "</subject-id>\n";
-				$xml .= '<subject-type>' . $this->getSubjectType() . "</subject-type>\n";
-			}
-			
-			$xml .= '<body>' . $this->getBody() . "</body>\n";
-			$xml .= '<frame>' . $this->getFrame() . "</frame>\n";
-			
-			if ($this->getCategoryId() != null)
-				$xml .= '<category-id>' . $this->getCategoryId() . "</category-id>\n";
-		
-			if ($this->getOwnerId() != null)	
-				$xml .= '<owner-id>' . $this->getOwnerId() . "</owner-id>\n";
-			
-			if ($this->getDueAt() != null)
-				$xml .= '<due-at>' . $this->getDueAt() . "</due-at>\n";
-			if ($this->getAlertAt() != null)
-				$xml .= '<alert-at>' . $this->getAlertAt() . "</alert-at>\n";
-			
-			if ($this->getPublic() != null)
-				$xml .= '<public type="boolean">' . ($this->getPublic() ? "true" : "false") . "</public>\n";
-			
-			if ($this->getNotify() != null)
-				$xml .= '<notify type="boolean">' . ($this->getNofity() ? "true" : "false") . "</notify>\n";
-			
+			$xml = new SimpleXMLElement("<task></task>");
+			$xml->addChild("id",$this->getId());
+			$xml->id->addAttribute("type","integer");
+			$xml->addChild("recording-id",$this->getRecordingId());
+			$xml->addChild("subject-id",$this->getSubjectId());
+			$xml->addChild("subject-type",$this->getSubjectType());
+			$xml->addChild("body",$this->getBody());
+			$xml->addChild("frame",$this->getFrame());
+			$xml->addChild("category-id",$this->getCategoryId());
+			$xml->addChild("owner-id",$this->getOwnerId());
+			$xml->addChild("due-at",$this->getDueAt());
+			$xml->addChild("alert-at",$this->getAlertAt());
+			$xml->addChild("public",($this->getPublic() ? "true" : "false"));
+			$xml->public->addAttribute("type","boolean");
+			$xml->addChild("notify",($this->getNotify() ? "true" : "false"));
+			$xml->notify->addAttribute("type","boolean");
 
-			$xml .= "</task>\n";
-			return $xml;
+			return $xml->asXML();
 		}		
 		
 		public function loadFromXMLObject($xml_obj)

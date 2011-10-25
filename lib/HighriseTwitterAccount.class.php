@@ -15,13 +15,12 @@
 		
 		public function toXML()
 		{
-			$xml = "<twitter-account>\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
-			$xml .= '<username>' . $this->getUsername() . "</username>\n";
-			$xml .= '<location>' . $this->getLocation() . "</location>\n";
-			$xml .= "</twitter-account>\n";
-			return $xml;
+                        $xml = new SimpleXMLElement("<twitter-account></twitter-account>");
+                        $xml->addChild("id",$this->getId());
+                        $xml->id->addAttribute("type","integer");
+                        $xml->addChild("username",$this->getUsername());
+                        $xml->addChild("location",$this->getLocation());
+			return $xml->asXML;
 		}
 		
 		public function setUrl($url)
