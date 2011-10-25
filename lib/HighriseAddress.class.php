@@ -11,17 +11,16 @@
 		
 		public function toXML()
 		{
-			$xml = "<address>\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
-			$xml .= '<city>' . $this->getCity() . "</city>\n";
-			$xml .= '<country>' . $this->getCountry() . "</country>\n";
-			$xml .= '<location>' . $this->getLocation() . "</location>\n";
-			$xml .= '<state>' . $this->getState() . "</state>\n";
-			$xml .= '<street>' . $this->getStreet() . "</street>\n";
-			$xml .= '<zip>' . $this->getZip() . "</zip>\n";
-			$xml .= "</address>\n";
-			return $xml;
+			$xml = new SimpleXMLElement("<address></address>");
+			$xml->addChild("id",$this->getId());
+			$xml->id->addAttribute("type","integer");
+			$xml->addChild("city",$this->getCity());
+			$xml->addChild("country",$this->getCountry());
+			$xml->addChild("location",$this->getLocation());
+			$xml->addChild("state",$this->getState());
+			$xml->addChild("street",$this->getStreet());
+			$xml->addChild("zip",$this->getZip());
+			return $xml->asXML();
 		}
 		
 		public function __toString()
