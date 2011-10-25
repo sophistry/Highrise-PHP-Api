@@ -9,6 +9,7 @@ require_once('HighriseEmail.class.php');
 require_once('HighriseInstantMessenger.class.php');
 require_once('HighriseNote.class.php');
 require_once('HighriseParty.class.php');
+require_once('HighriseEntity.class.php');
 require_once('HighrisePerson.class.php');
 require_once('HighrisePhoneNumber.class.php');
 require_once('HighriseTag.class.php');
