@@ -17,16 +17,15 @@
 		
 		public function toXML()
 		{
-			$xml = '';
-			if ($this->getId() != null) {
-				$xml = "<subject_data>\n";
-				$xml .= '  <id type="integer">' . $this->getId() . "</id>\n";
-				$xml .= '  <value>' . $this->getValue() . "</value>\n";
-				$xml .= '  <subject_field_id type="integer">' . $this->getSubjectFieldId() . "</subject_field_id>\n";
-				$xml .= '  <subject_field_label>' . $this->getSubjectFieldLabel() . "</subject_field_label>\n";
-				$xml .= "</subject_data>\n";
-			}
-			return $xml;
+
+                        $xml = new SimpleXMLElement("<subject_data></subject_data>");
+                        $xml->addChild("id",$this->getId());
+                        $xml->id->addAttribute("type","integer");
+                        $xml->addChild("value",$this->getValue());
+                        $xml->addChild("subject_field_id",$this->getSubjectFieldId());
+                        $xml->subject_field_id->addAttribute("type","integer");
+                        $xml->addChild("subject_field_label",$this->getSubjectFieldLabel());
+			return $xml->asXML();
 		}
 		
 		public function __toString()
