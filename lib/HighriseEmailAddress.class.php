@@ -1,45 +1,66 @@
 <?php
-
-require_once('HighriseNote.class.php');
-
-	class HighriseEmail extends HighriseNote
+	class HighriseEmailAddress 
 	{
-		public $title;
+		public $id;
+		public $address;
+		public $location;
 		
-		public function setTitle($title)
+		public function __construct($id = null, $address = null, $location = null)
 		{
-			$this->title = (string)$title;
-		}
-
-		public function getTitle()
-		{
-			return $this->title;
-		}
-
-		public function __construct(HighriseAPI $highrise)
-		{
-			parent::__construct($highrise);
-			$this->_note_type = "email";
-			$this->_note_url = "/emails";
+			$this->setId($id);
+			$this->setAddress($address);
+			$this->setLocation($location);			
 		}
 		
-		public function loadFromXMLObject($xml_obj)
+		public function toXML()
 		{
-			if ($this->debug)
-				print_r($xml_obj);
-
-			$this->setId($xml_obj->{'id'});
-			$this->setAuthorId($xml_obj->{'author-id'});
-			$this->setOwnerId($xml_obj->{'owner-id'});
-			$this->setSubjectId($xml_obj->{'subject-id'});
-			$this->setSubjectType($xml_obj->{'subject-type'});
-			$this->setCreatedAt($xml_obj->{'created-at'});
-			$this->setUpdatedAt($xml_obj->{'updated-at'});
-			$this->setVisibleTo($xml_obj->{'visible-to'});
-			$this->setSubjectName($xml_obj->{'subject-name'});
-			$this->setTitle($xml_obj->{'title'});
-			$this->setBody($xml_obj->{'body'});
-
-			return true;
+			$xml = "<email-address>\n";
+			if ($this->getId() != null)
+				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
+			$xml .= '<address>' . $this->getAddress() . "</address>\n";
+			$xml .= '<location>' . $this->getLocation() . "</location>\n";
+			$xml .= "</email-address>\n";
+			return $xml;
 		}
+		
+		public function __toString()
+		{
+			return $this->getAddress();
+		}
+		
+		public function setAddress($address)
+		{
+			$this->address = (string)$address;
+		}
+
+		public function getAddress()
+		{
+			return $this->address;
+		}
+	
+		public function setLocation($location)
+		{
+			$valid_locations = array("Work", "Home", "Other");
+			$location = ucwords(strtolower($location));
+			if ($location != null && !in_array($location, $valid_locations))
+				throw new Exception("$location is not a valid location. Available locations: " . implode(", ", $valid_locations));
+				
+			$this->location = (string)$location;
+		}
+
+		public function getLocation()
+		{
+			return $this->location;
+		}
+
+		public function setId($id)
+		{
+			$this->id = (string)$id;
+		}
+
+		public function getId()
+		{
+			return $this->id;
+		}	
 	}
+		
