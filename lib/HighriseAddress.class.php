@@ -8,10 +8,8 @@
 		public $state;
 		public $street;
 		public $zip;
-		
-		public function toXML()
-		{
-			$xml = new SimpleXMLElement("<address></address>");
+
+		public function createXML(&$xml) {
 			$xml->addChild("id",$this->getId());
 			$xml->id->addAttribute("type","integer");
 			$xml->addChild("city",$this->getCity());
@@ -20,6 +18,13 @@
 			$xml->addChild("state",$this->getState());
 			$xml->addChild("street",$this->getStreet());
 			$xml->addChild("zip",$this->getZip());
+			return $xml;
+		}
+		
+		public function toXML()
+		{
+			$xml = new SimpleXMLElement("<address></address>");
+			$xml = $this->createXML($xml);
 			return $xml->asXML();
 		}
 		
