@@ -1,5 +1,7 @@
 <?php
 	
+require_once('HighriseEntity.class.php');
+
 	class HighriseCompany extends HighriseEntity
 	{
 		public $name;
@@ -89,10 +91,10 @@
 		public function toXML($include_header = true)
 		{
 
-			$xml = new SimpleXMLElement(parent::toXML());
+			$xml = new SimpleXMLElement("<company></company>");
+			$xml = parent::createXML($xml);
 			$xml->addChild("name",$this->getName());
 			$xml->addChild("type",$this->getType());
-			
 			return $xml->asXML();
 		}
 		
