@@ -1,8 +1,12 @@
 <?php
+
+require_once('HighriseEntity.class.php');
+
 	
 	class HighrisePerson extends HighriseEntity
 	{
 		public $company_id;
+		public $company_name;
 		public $first_name;
 		public $last_name;
 		public $title;
@@ -91,7 +95,8 @@
 		public function toXML($include_header = true)
 		{
 
-			$xml = new SimpleXMLElement(parent::toXML());
+			$xml = new SimpleXMLElement("<person></person>");
+			$xml = parent::createXML($xml);
 			$xml->addChild("company-id",$this->getCompanyId());
 			$xml->addChild("company-name",$this->getCompanyName());
 			$xml->addChild("first-name",$this->getFirstName());
@@ -110,6 +115,7 @@
 			$this->setLastName($xml_obj->{'last-name'});
 			$this->setTitle($xml_obj->{'title'});
 			$this->setCompanyId($xml_obj->{'company-id'});
+			$this->setCompanyName($xml_obj->{'company-name'});
 			$this->setType("Person");
 			if (!empty($xml_obj->{'type'})) {
 				$this->setType($xml_obj->{'type'});
