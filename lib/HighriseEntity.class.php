@@ -223,19 +223,23 @@
 				$this->customfields[$v] = $field;
 			}
 		}
+
+		public function toXML() {
+			$xml = new SimpleXMLElement("<entity></entity>");
+			$xml = $this->createXML($xml);
+			return $xml->asXML();
+		}
 			
-		public function toXML($include_header = true)
+		public function createXML($xml)
 		{
 
-
-			$xml = new SimpleXMLElement("<entity></entity>");
 			$xml->addChild("id",$this->getId());
 			$xml->id->addAttribute("type","integer");
 
 			$created = $xml->addChild("created-at",$this->getCreatedAt());
 			$created->addAttribute("type","datetime");
 
-			$updated = $xml->addChild("updated-at",$this->getCountry());
+			$updated = $xml->addChild("updated-at",$this->getUpdatedAt());
 			$updated->addAttribute("type","datetime");
 
 			$xml->addChild("background",$this->getBackground());
@@ -243,53 +247,45 @@
 			$xml->addChild("type",$this->getType());
 
 			$contact_data = $xml->addChild("contact-data");
+
+			// loop through the email addresses and append them to the XML object.
 			$emails = $contact_data->addChild("email-addresses");
 			foreach ($this->email_addresses as $email_obj) { 
-				$tmp = new SimpleXMLElement($email_obj->toXML());
-				$emails->addChild("email-address",$tmp);
+				$email = $emails->addChild("email-address");
+				$email_obj->createXML($email);
 			}
 
-			$contact_data->addChild("phone-numbers");
-			$contact_data->addChild("addresses");
-			$contact_data->addChild("instant-messengers");
-			$contact_data->addChild("twitter-accounts");
-			$contact_data->addChild("web-addresses");
-			
-
-			return $xml->asXML;
-
-
-			/*
-
-
-			$xml[] = "\t<contact-data>";
-			
-			foreach(array("email_address", "instant_messenger", "twitter_account", "web_address", "address", "phone_number") as $contact_node)
-			{
-				if (!strstr($contact_node, "address"))
-					$contact_node_plural = $contact_node . "s";		
-				else
-					$contact_node_plural = $contact_node . "es";
-				
-				
-				if (count($this->$contact_node_plural) > 0)
-				{
-					$xml[] = "\t\t<" . str_replace("_", "-", $contact_node_plural) . ">";
-					foreach($this->$contact_node_plural as $items)
-					{
-						$xml[] = $items->toXML();
-					}
-					$xml[] = "</" . str_replace("_", "-", $contact_node_plural) . ">";
-				}
-			}
-			$xml[] = "\t</contact-data>";
-			
-			if ($include_header == true) {
-				$xml[] = "</person>";
+			$phones = $contact_data->addChild("phone-numbers");
+			foreach ($this->phone_numbers as $phone_obj) { 
+				$phone = $phones->addChild("phone-number");
+				$phone_obj->createXML($phone);
 			}
 
-			return implode("\n", $xml);		
-			*/
+			$addresses = $contact_data->addChild("addresses");
+			foreach ($this->addresses as $address_obj) { 
+				$address = $addresses->addChild("address");
+				$address_obj->createXML($address);
+			}
+
+			$ims = $contact_data->addChild("instant-messengers");
+			foreach ($this->instant_messengers as $im_obj) {
+				$im = $ims->addChild("instant-messengers");
+				$im_obj->createXML($im);
+			}
+
+			$twitters = $contact_data->addChild("twitter-accounts");
+			foreach ($this->twitter_accounts as $twat_obj) {
+				$twitter = $twitters->addChild("twitter-accounts");
+				$twat_obj->createXML($twitter);
+			}
+
+			$webs = $contact_data->addChild("web-addresses");
+			foreach ($this->web_addresses as $web_obj) {
+				$web = $webs->addChild("web-addresses");
+				$web_obj->createXML($web);
+			}
+
+			return $xml;
 		}
 		
 		public function loadFromXMLObject($xml_obj)
@@ -343,6 +339,7 @@
 		
 		public function loadContactDataFromXMLObject($xml_obj)
 		{
+
 			$this->phone_numbers = array();
 			$this->email_addresses = array();
 			$this->web_addresses = array();
