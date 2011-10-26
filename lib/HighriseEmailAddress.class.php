@@ -11,16 +11,27 @@
 			$this->setAddress($address);
 			$this->setLocation($location);			
 		}
+
+		public function createXML(&$xml)
+		{
+			$xml->addChild("id",$this->getId());
+			$xml->id->addAttribute("type","integer");
+			$xml->addChild("address",$this->getAddress());
+			$xml->addChild("location",$this->getLocation());
+			return $xml;
+		}
+		
 		
 		public function toXML()
 		{
-			$xml = "<email-address>\n";
-			if ($this->getId() != null)
-				$xml .= '<id type="integer">' . $this->getId() . "</id>\n";
-			$xml .= '<address>' . $this->getAddress() . "</address>\n";
-			$xml .= '<location>' . $this->getLocation() . "</location>\n";
-			$xml .= "</email-address>\n";
-			return $xml;
+			$xml = new SimpleXMLElement("<email-address></email-address>");
+			$xml = $this->createXML($xml);
+			# $xml = new SimpleXMLElement("<email-address></email-address>");
+			# $xml->addChild("id",$this->getId());
+			# $xml->id->addAttribute("type","integer");
+			# $xml->addChild("address",$this->getAddress());
+			# $xml->addChild("location",$this->getLocation());
+			return $xml->asXML();
 		}
 		
 		public function __toString()
