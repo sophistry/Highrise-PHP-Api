@@ -13,13 +13,18 @@
 			$this->setLocation($location);			
 		}
 		
-		public function toXML()
-		{
-                        $xml = new SimpleXMLElement("<twitter-account></twitter-account>");
+		public function createXML(&$xml) {
                         $xml->addChild("id",$this->getId());
                         $xml->id->addAttribute("type","integer");
                         $xml->addChild("username",$this->getUsername());
                         $xml->addChild("location",$this->getLocation());
+			return $xml;
+		}
+
+		public function toXML()
+		{
+                        $xml = new SimpleXMLElement("<twitter-account></twitter-account>");
+			$xml = $this->createXML($xml);
 			return $xml->asXML;
 		}
 		

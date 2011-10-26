@@ -13,14 +13,20 @@
 			$this->setLocation($location);			
 		}
 		
-		public function toXML()
-		{
-
-                        $xml = new SimpleXMLElement("<phone-number></phone-number>");
+		public function createXML(&$xml)
+		{ 
                         $xml->addChild("id",$this->getId());
                         $xml->id->addAttribute("type","integer");
                         $xml->addChild("number",$this->getNumber());
                         $xml->addChild("location",$this->getLocation());
+			return $xml;
+		}
+			
+		public function toXML()
+		{
+
+                        $xml = new SimpleXMLElement("<phone-number></phone-number>");
+			$xml = $this->createXML($xml);
 			return $xml->asXML();
 		}
 				

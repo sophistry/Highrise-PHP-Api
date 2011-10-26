@@ -6,15 +6,19 @@
 		public $location;
 		public $url;
 		
-		public function toXML()
-		{
 
-                        $xml = new SimpleXMLElement("<web-address></web-address>");
+		public function createXML(&$xml) {
                         $xml->addChild("id",$this->getId());
                         $xml->id->addAttribute("type","integer");
                         $xml->addChild("location",$this->getLocation());
                         $xml->addChild("url",$this->getUrl());
+			return $xml;
+		}
+		public function toXML()
+		{
 
+                        $xml = new SimpleXMLElement("<web-address></web-address>");
+			$xml = $this->createXML($xml);
 			return $xml->asXML;
 		}
 		

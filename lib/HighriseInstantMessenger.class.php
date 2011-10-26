@@ -13,17 +13,20 @@
 			$this->setAddress($address);		
 			$this->setLocation($location);				
 		}
-		
-		public function toXML()
-		{
 
-
-                        $xml = new SimpleXMLElement("<instant-messenger></instant-messenger>");
+		public function createXML(&$xml) {
                         $xml->addChild("id",$this->getId());
                         $xml->id->addAttribute("type","integer");
                         $xml->addChild("protocol",$this->getProtocol());
                         $xml->addChild("location",$this->getLocation());
                         $xml->addChild("address",$this->getAddress());
+			return $xml;
+		}
+		
+		public function toXML()
+		{
+                        $xml = new SimpleXMLElement("<instant-messenger></instant-messenger>");
+			$xml = $this->createXML($xml);
 			return $xml->asXML();
 		}
 		
