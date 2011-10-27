@@ -2,9 +2,6 @@
 
 class TestOfHighrise extends UnitTestCase {
 
-	# public $account = 'j2dev';
-	# public $token = '233fc6281bade8290df044ec5f312d54';
-
 	public $account;
 	public $token;
 
