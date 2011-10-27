@@ -123,12 +123,7 @@ require_once('HighriseEntity.class.php');
 		
 		public function __construct(HighriseAPI $highrise)
 		{
-			$this->highrise = $highrise;
-			$this->account = $highrise->account;
-			$this->token = $highrise->token;
-			$this->setVisibleTo("Everyone");
-			$this->debug = $highrise->debug;
-			$this->curl = curl_init();		
+			parent::__construct($highrise);
 		}
 	}
 	

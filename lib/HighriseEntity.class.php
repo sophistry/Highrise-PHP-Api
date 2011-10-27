@@ -23,10 +23,10 @@
 		public $twitter_accounts;
 
 		public $tags;
-		private $original_tags;
+		protected $original_tags;
 		
 		public $customfields;
-		private $original_customfields;
+		protected $original_customfields;
 		
 		public $notes;
 		public $emails;
@@ -256,6 +256,7 @@
 			}
 
 			$phones = $contact_data->addChild("phone-numbers");
+
 			foreach ($this->phone_numbers as $phone_obj) { 
 				$phone = $phones->addChild("phone-number");
 				$phone_obj->createXML($phone);
@@ -544,6 +545,13 @@
 			$this->setVisibleTo("Everyone");
 			$this->debug = $highrise->debug;
 			$this->curl = curl_init();		
+
+			$this->phone_numbers = array();
+			$this->email_addresses = array();
+			$this->web_addresses = array();
+			$this->addresses = array();
+			$this->instant_messengers = array();
+			$this->twitter_accounts = array();
 		}
 	}
 	
