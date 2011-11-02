@@ -22,7 +22,7 @@
 		public $responsible_party_id;
 		public $status;
 		public $status_changed_on;
-		// public $parties;
+		public $parties;
 		public $party;
 		
 		public function __construct(HighriseAPI $highrise)
@@ -32,7 +32,7 @@
 			$this->token = $highrise->token;
 			$this->debug = $highrise->debug;
 			$this->curl = curl_init();		
-			// $this->parties = array();
+			$this->parties = array();
 
 		}
 
@@ -305,93 +305,98 @@
 		}
 
 		// no set parties or party since they're "special"
-		/*
 		public function getParties()
 		{
 			return $this->parties;
 		}
-		*/
 
 		public function getParty()
 		{
 			return $this->party;
 		}
 
+
+		public function createXML($xml) {
+
+			if ($this->getName() == null) {
+				throw new Exception("HighriseDeals::getName returned null which is invalid inside of createXML.  Name is required for a deal");
+			}
+
+			$xml->addChild('id',$this->getId());
+			$xml->{'id'}->addAttribute('type','integer');
+
+			$xml->addChild('name',$this->getName());
+
+			$xml->addChild('account-id',$this->getAccountId());
+			$xml->{'account-id'}->addAttribute('type','integer');
+
+			$xml->addChild('author-id',$this->getAuthorId());
+			$xml->{'author-id'}->addAttribute('type','integer');
+
+			$xml->addChild('background',$this->getBackground());
+
+			$xml->addChild('category-id',$this->getCategoryId());
+			$xml->{'category-id'}->addAttribute('type','integer');
+
+			$xml->addChild('created-at',$this->getCreatedAt());
+			$xml->{'created-at'}->addAttribute('type','datetime');
+
+			$xml->addChild('updated-at',$this->getUpdatedAt());
+			$xml->{'updated-at'}->addAttribute('type','datetime');
+
+			$xml->addChild('currency',$this->getCurrency());
+
+			$xml->addChild('duration',$this->getDuration());
+			$xml->{'duration'}->addAttribute('type','integer');
+
+			$xml->addChild('group-id',$this->getGroupId());
+			$xml->{'group-id'}->addAttribute('type','integer');
+
+			$xml->addChild('owner-id',$this->getOwnerId());
+			$xml->{'owner-id'}->addAttribute('type','integer');
+
+			$xml->addChild('party-id',$this->getPartyId());
+			$xml->{'party-id'}->addAttribute('type','integer');
+
+			$xml->addChild('price',$this->getPrice());
+			$xml->{'price'}->addAttribute('type','integer');
+
+			$xml->addChild('price-type',$this->getPriceType());
+
+			$xml->addChild('responsible-party-id',$this->getResponsiblePartyId());
+			$xml->{'responsible-party-id'}->addAttribute('type','integer');
+
+			$xml->addChild('status',$this->getStatus());
+
+			$xml->addChild('status-changed-on',$this->getStatusChangedOn());
+			$xml->{'status-changed-on'}->addAttribute('type','date');
+
+			$xml->addChild('visible-to',$this->getVisibleTo());
+
+			if (is_object($this->party)) {
+				$party = $xml->addChild("party");
+				$this->party->createXML($party);
+			}
+
+			if (count($this->parties) > 0) {
+				$parties = $xml->addChild('parties');
+				$parties->addAttribute("type", "array");
+				foreach ($this->parties as $party_obj) {
+					$party = $parties->addChild("party");
+					$party_obj->createXML($party);
+				}
+			}
+
+			return $xml;
+
+		}
+
 		public function toXML()
 		{
 
-			$xml  = "<deal>\n";
-
-			if ($this->getName() == null) {
-				throw new Exception("HighriseDeals::getName returned null which is invalid inside of toXML.  Name is required for a deal");
-			}
-
-			if ($this->getAccountId() != null) {
-				$xml .= '  <account-id type="integer">' . $this->getAccountId() . "</account-id>\n";
-			}
-			if ($this->getAuthorId() != null) {
-				$xml .= '  <author-id type="integer">' . $this->getAuthorId() . "</author-id>\n";
-			}
-			if ($this->getBackground() != null) {
-				$xml .= '  <background>' . $this->getBackground() . "</background>\n";
-			}
-			if ($this->getCategoryId() != null) {
-				$xml .= '  <category-id type="integer">' . $this->getCategoryId() . "</category-id>\n";
-			} 
-			if ($this->getCreatedAt() != null) {
-				$xml .= '  <created-at type="datetime">' . $this->getCreatedAt() . "</created-at>\n";
-			}
-			if ($this->getCurrency() != null) {
-				$xml .= '  <currency>' . $this->getCurrency() . "</currency>\n";
-			}
-			if ($this->getDuration() != null) {
-				$xml .= '  <duration type="integer">' . $this->getDuration() . "</duration>\n";
-			}
-			if ($this->getGroupId() != null) {
-				$xml .= '  <group-id type="integer">' . $this->getGroupId() . "</group-id>\n";
-			}
-
-			if ($this->getId() != null) {
-				$xml .= '  <id type="integer">' . $this->getId() . "</id>\n";
-			}
-
-			$xml .= '  <name>' . $this->getName() . "</name>\n";
-
-
-			if ($this->getOwnerId() != null) {
-				$xml .= '  <owner-id type="integer">' . $this->getOwnerId() . "</owner-id>\n";
-			}
-			if ($this->getPartyId() != null) {
-				$xml .= '  <party-id type="integer">' . $this->getPartyId() . "</party-id>\n";
-			}
-			if ($this->getPrice() != null) {
-				$xml .= '  <price type="integer">' . $this->getPrice() . "</price>\n";
-			}
-			if ($this->getPriceType() != null) {
-				$xml .= '  <price-type>' . $this->getPriceType() . "</price-type>\n";
-			}
-			if ($this->getResponsiblePartyId() != null) {
-				$xml .= '  <responsible-party-id type="integer">' . $this->getResponsiblePartyId() . "</responsible-party-id>\n";
-			}
-			if ($this->getStatus() != null) {
-				$xml .= '  <status>' . $this->getStatus() . "</status>\n";
-			}
-			if ($this->getStatusChangedOn() != null) {
-				$xml .= '  <status-changed-on type="date">' . $this->getStatusChangedOn() . "</status-changed-on>\n";
-			}
-			if ($this->getUpdatedAt() != null) {
-				$xml .= '  <updated-at type="datetime">' . $this->getUpdatedAt() . "</updated-at>\n";
-			}
-			if ($this->getVisibleTo() != null) {
-				$xml .= '  <visible-to>' . $this->getVisibleTo() . "</visible-to>\n";
-			}
-			# $xml .= '  <parties>' . $this->getParties() . "</parties>\n";
-			if (is_object($this->party)) {
-				$xml .= $this->party->toXML();
-			}
-			# $xml .= '  <parties type="array"/>' . "\n";
-			$xml .= '</deal>';
-			return $xml;
+			$xml  = new SimpleXMLElement("<deal></deal>");
+			$xml = $this->createXML($xml);
+			return $xml->asXML();
 		}		
 		
 		public function loadFromXMLObject($xml_obj)
@@ -423,8 +428,8 @@
 			$this->setStatusChangedOn($xml_obj->{'status-changed-on'});
 			$this->setUpdatedAt($xml_obj->{'updated-at'});
 			$this->setVisibleTo($xml_obj->{'visible-to'});
-			// $this->loadPartiesFromXMLObject($xml_obj->{'parties'});
 			$this->loadPartyFromXMLObject($xml_obj->{'party'});
+			$this->loadPartiesFromXMLObject($xml_obj->{'parties'});
 
 			return true;
 		}
@@ -439,17 +444,13 @@
 
 		}
 
-/*
 		function loadPartiesFromXMLObject($xml_obj) {
-			if (count($xml_obj->{'party'}) > 0) {
-				foreach($xml_obj->{'party'} as $party_obj) {
-					$new_party = new HighriseParty($this->highrise);
-					$this->parties[] = $new_party->loadFromXMLObject($party_obj);
-				}
-			}
-
+			foreach ($xml_obj->{'party'} as $party_obj) {
+				$new_party = new HighriseParty($this->highrise);
+				$new_party->loadFromXMLObject($party_obj);
+				$this->parties[] = $new_party;
+			} 
 		}
-*/
 
 	}
 	

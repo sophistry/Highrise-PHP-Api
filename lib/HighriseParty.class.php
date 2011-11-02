@@ -14,7 +14,19 @@
 			$this->curl = curl_init();		
 		}
 
-		// TODO
+		public function createXML(&$xml) {
+
+			if ($this->type == "Company") {
+				$xml = $this->company->createXML($xml);
+			} elseif ($this->type == "Person") {
+				$xml = $this->person->createXML($xml);
+			} else {
+				throw new Exception("Party type is not supported: " . $this->type);
+			}
+
+			return $xml;
+
+		}
 		public function toXML()
 		{
 			if (empty($this->type)) {
