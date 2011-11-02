@@ -19,16 +19,23 @@ require_once('HighriseEntity.class.php');
 			$this->setType("Person");
 		}
 
-		public function toXML($header = "person")
-		{
 
-			$xml = new SimpleXMLElement("<" . $header . "></" . $header . ">");
+		// take in a more or less empty XML object, populate it with all the fields from the parent
+		// add on our own custom fields then return the object
+		public function createXML($xml) {
+
 			$xml = parent::createXML($xml);
 			$xml->addChild("company-id",$this->getCompanyId());
 			$xml->addChild("company-name",$this->getCompanyName());
 			$xml->addChild("first-name",$this->getFirstName());
 			$xml->addChild("last-name",$this->getLastName());
-			
+			return $xml;
+		}
+		public function toXML($header = "person")
+		{
+
+			$xml = new SimpleXMLElement("<" . $header . "></" . $header . ">");
+			$xml = $this->createXML($xml);
 			return $xml->asXML();
 		}
 		
