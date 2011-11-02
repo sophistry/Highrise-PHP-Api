@@ -10,6 +10,7 @@
 		public $background;
 		public $created_at;
 		public $updated_at;
+		public $type;
 		
 		// TODO: public $owner_id;
 		// TODO: public $group_id;
@@ -83,10 +84,13 @@
 		
 			return true;
 		}
-		
-		
 
-
+		public function setType($type) {
+			$this->type = (string)$type;
+		}
+		public function getType() {
+			return (string)$this->type;
+		}
 
 		public function getEmailAddresses()
 		{

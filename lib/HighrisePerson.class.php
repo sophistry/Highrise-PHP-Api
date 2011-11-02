@@ -10,20 +10,13 @@ require_once('HighriseEntity.class.php');
 		public $first_name;
 		public $last_name;
 		public $title;
-		public $type;
 
 		public function __construct(HighriseAPI $highrise)
 		{
 			parent::__construct($highrise);
 			$this->url_base = "people";
 			$this->errorcheck = "Person";
-		}
-
-		public function setType($type) {
-			$this->type = (string)$type;
-		}
-		public function getType() {
-			return (string)$this->type;
+			$this->setType("Person");
 		}
 
 		public function toXML($include_header = true)
@@ -35,7 +28,6 @@ require_once('HighriseEntity.class.php');
 			$xml->addChild("company-name",$this->getCompanyName());
 			$xml->addChild("first-name",$this->getFirstName());
 			$xml->addChild("last-name",$this->getLastName());
-			$xml->addChild("type",$this->getType());
 			
 			return $xml->asXML();
 		}
@@ -50,10 +42,6 @@ require_once('HighriseEntity.class.php');
 			$this->setTitle($xml_obj->{'title'});
 			$this->setCompanyId($xml_obj->{'company-id'});
 			$this->setCompanyName($xml_obj->{'company-name'});
-			$this->setType("Person");
-			if (!empty($xml_obj->{'type'})) {
-				$this->setType($xml_obj->{'type'});
-			}
 			
 		}
 		
