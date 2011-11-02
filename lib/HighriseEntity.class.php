@@ -2,6 +2,10 @@
 	
 	class HighriseEntity extends HighriseAPI
 	{
+
+		protected $url_base;
+		protected $errorcheck;
+
 		public $id;
 		public $background;
 		public $created_at;
@@ -30,7 +34,60 @@
 		
 		public $notes;
 		public $emails;
+
+		public function __construct(HighriseAPI $highrise)
+		{
+			$this->highrise = $highrise;
+			$this->account = $highrise->account;
+			$this->token = $highrise->token;
+			$this->setVisibleTo("Everyone");
+			$this->debug = $highrise->debug;
+			$this->curl = curl_init();		
+
+			$this->phone_numbers = array();
+			$this->email_addresses = array();
+			$this->web_addresses = array();
+			$this->addresses = array();
+			$this->instant_messengers = array();
+			$this->twitter_accounts = array();
+		}
+
+		public function delete()
+		{
+			$this->postDataWithVerb("/" . $this->url_base . "/" . $this->getId() . ".xml", "", "DELETE");
+			$this->checkForErrors($this->errorcheck, 200);	
+		}
+
+		public function save()
+		{
+			$person_xml = $this->toXML();
+			if ($this->getId() != null)
+			{
+				$new_xml = $this->postDataWithVerb("/" . $this->url_base . "/" . $this->getId() . ".xml?reload=true", $person_xml, "PUT");
+				$this->checkForErrors($this->errorcheck);
+			}
+			else
+			{
+				$new_xml = $this->postDataWithVerb("/" . $this->url_base . ".xml", $person_xml, "POST");
+				$this->checkForErrors($this->errorcheck, 201);
+			}
+			
+			// Reload object and add tags.
+			$tags = $this->tags;
+			$original_tags = $this->original_tags;
+				
+			$this->loadFromXMLObject(simplexml_load_string($new_xml));
+			$this->tags = $tags;
+			$this->original_tags = $original_tags;
+			$this->saveTags();
 		
+			return true;
+		}
+		
+		
+
+
+
 		public function getEmailAddresses()
 		{
 			return $this->email_addresses;
@@ -70,7 +127,7 @@
 		public function getEmails()
 		{
 			$this->emails = array();
-			$xml = $this->getURL("/people/" . $this->id . "/emails.xml");
+			$xml = $this->getURL("/" . $this->url_base . "/" . $this->id . "/emails.xml");
 			$xml_obj = simplexml_load_string($xml);
 
 			if ($this->debug == true);
@@ -100,7 +157,7 @@
 		public function getNotes()
 		{
 			$this->notes = array();
-			$xml = $this->getURL("/people/" . $this->id . "/notes.xml");
+			$xml = $this->getURL("/" . $this->url_base . "/" . $this->id . "/notes.xml");
 			$xml_obj = simplexml_load_string($xml);
 
 			if ($this->debug == true);
@@ -119,38 +176,6 @@
 			return $this->notes;
 		}
 		
-		public function delete()
-		{
-			$this->postDataWithVerb("/people/" . $this->getId() . ".xml", "", "DELETE");
-			$this->checkForErrors("Person", 200);	
-		}
-		
-		public function save()
-		{
-			$person_xml = $this->toXML();
-			if ($this->getId() != null)
-			{
-				$new_xml = $this->postDataWithVerb("/people/" . $this->getId() . ".xml?reload=true", $person_xml, "PUT");
-				$this->checkForErrors("Person");
-			}
-			else
-			{
-				$new_xml = $this->postDataWithVerb("/people.xml", $person_xml, "POST");
-				$this->checkForErrors("Person", 201);
-			}
-			
-			// Reload object and add tags.
-			$tags = $this->tags;
-			$original_tags = $this->original_tags;
-				
-			$this->loadFromXMLObject(simplexml_load_string($new_xml));
-			$this->tags = $tags;
-			$this->original_tags = $original_tags;
-			$this->saveTags();
-		
-			return true;
-		}
-		
 		public function saveTags()
 		{
 			if (is_array($this->tags))
@@ -163,8 +188,8 @@
 						if ($this->debug)
 							print "Adding Tag: " . $tag->getName() . "\n";
 
-						$new_tag_data = $this->postDataWithVerb("/people/" . $this->getId() . "/tags.xml", "<name>" . $tag->getName() . "</name>", "POST");
-						$this->checkForErrors("Person (add tag)", array(200, 201));
+						$new_tag_data = $this->postDataWithVerb("/" . $this->url_base . "/" . $this->getId() . "/tags.xml", "<name>" . $tag->getName() . "</name>", "POST");
+						$this->checkForErrors($this->errorcheck . " (add tag)", array(200, 201));
 						$new_tag_data = simplexml_load_string($new_tag_data);
 						$this->tags[$tag_name]->setId($new_tag_data->id);
 						unset($this->original_tags[$tag->getId()]);
@@ -182,8 +207,8 @@
 					{
 						if ($this->debug)
 							print "REMOVE TAG: " . $tag_id;
-						$new_tag_data = $this->postDataWithVerb("/people/" . $this->getId() . "/tags/" . $tag_id . ".xml", "", "DELETE");
-						$this->checkForErrors("Person (delete tag)", 200);
+						$new_tag_data = $this->postDataWithVerb("/" . $this->url_base . "/" . $this->getId() . "/tags/" . $tag_id . ".xml", "", "DELETE");
+						$this->checkForErrors($this->errorcheck . " (delete tag)", 200);
 					}					
 				}
 				
@@ -443,7 +468,7 @@
 			$this->web_addresses[] = $item;
 		}
 		
-		public function addInstantMessenger($protocol, $address, $location = "Personal")
+		public function addInstantMessenger($protocol, $address, $location = "Work")
 		{
 			$item = new HighriseInstantMessenger();
 			$item->setProtocol($protocol);
@@ -453,7 +478,7 @@
 			$this->instant_messengers[] = $item;
 		}
 
-		public function addTwitterAccount($username, $location = "Personal")
+		public function addTwitterAccount($username, $location = "Work")
 		{
 			$item = new HighriseTwitterAccount();
 			$item->setUsername($username);
@@ -537,21 +562,5 @@
 			return $this->id;
 		}
 
-		public function __construct(HighriseAPI $highrise)
-		{
-			$this->highrise = $highrise;
-			$this->account = $highrise->account;
-			$this->token = $highrise->token;
-			$this->setVisibleTo("Everyone");
-			$this->debug = $highrise->debug;
-			$this->curl = curl_init();		
-
-			$this->phone_numbers = array();
-			$this->email_addresses = array();
-			$this->web_addresses = array();
-			$this->addresses = array();
-			$this->instant_messengers = array();
-			$this->twitter_accounts = array();
-		}
 	}
 	

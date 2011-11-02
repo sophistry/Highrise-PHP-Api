@@ -11,85 +11,19 @@ require_once('HighriseEntity.class.php');
 		public $last_name;
 		public $title;
 		public $type;
-		
+
+		public function __construct(HighriseAPI $highrise)
+		{
+			parent::__construct($highrise);
+			$this->url_base = "people";
+			$this->errorcheck = "Person";
+		}
+
 		public function setType($type) {
 			$this->type = (string)$type;
 		}
 		public function getType() {
 			return (string)$this->type;
-		}
-
-		public function delete()
-		{
-			$this->postDataWithVerb("/people/" . $this->getId() . ".xml", "", "DELETE");
-			$this->checkForErrors("Person", 200);	
-		}
-		
-		public function save()
-		{
-			$person_xml = $this->toXML();
-			if ($this->getId() != null)
-			{
-				$new_xml = $this->postDataWithVerb("/people/" . $this->getId() . ".xml?reload=true", $person_xml, "PUT");
-				$this->checkForErrors("Person");
-			}
-			else
-			{
-				$new_xml = $this->postDataWithVerb("/people.xml", $person_xml, "POST");
-				$this->checkForErrors("Person", 201);
-			}
-			
-			// Reload object and add tags.
-			$tags = $this->tags;
-			$original_tags = $this->original_tags;
-				
-			$this->loadFromXMLObject(simplexml_load_string($new_xml));
-			$this->tags = $tags;
-			$this->original_tags = $original_tags;
-			$this->saveTags();
-		
-			return true;
-		}
-		
-		public function saveTags()
-		{
-			if (is_array($this->tags))
-			{
-				foreach($this->tags as $tag_name => $tag)
-				{
-					if ($tag->getId() == null) // New Tag
-					{
-					 	
-						if ($this->debug)
-							print "Adding Tag: " . $tag->getName() . "\n";
-
-						$new_tag_data = $this->postDataWithVerb("/people/" . $this->getId() . "/tags.xml", "<name>" . $tag->getName() . "</name>", "POST");
-						$this->checkForErrors("Person (add tag)", array(200, 201));
-						$new_tag_data = simplexml_load_string($new_tag_data);
-						$this->tags[$tag_name]->setId($new_tag_data->id);
-						unset($this->original_tags[$tag->getId()]);
-
-					}
-					else // Remove Tag from deletion list
-					{
-						unset($this->original_tags[$tag->getId()]);
-					}
-				}
-				
-				if (is_array($this->original_tags))
-				{
-					foreach($this->original_tags as $tag_id=>$v)
-					{
-						if ($this->debug)
-							print "REMOVE TAG: " . $tag_id;
-						$new_tag_data = $this->postDataWithVerb("/people/" . $this->getId() . "/tags/" . $tag_id . ".xml", "", "DELETE");
-						$this->checkForErrors("Person (delete tag)", 200);
-					}					
-				}
-				
-				foreach($this->tags as $tag_name => $tag)
-					$this->original_tags[$tag->getId()] = 1;	
-			}
 		}
 
 		public function toXML($include_header = true)
@@ -175,11 +109,6 @@ require_once('HighriseEntity.class.php');
 		public function getTitle()
 		{
 			return $this->title;
-		}
-
-		public function __construct(HighriseAPI $highrise)
-		{
-			parent::__construct($highrise);
 		}
 	}
 	
