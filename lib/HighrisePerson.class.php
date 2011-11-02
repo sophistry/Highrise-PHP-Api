@@ -19,10 +19,10 @@ require_once('HighriseEntity.class.php');
 			$this->setType("Person");
 		}
 
-		public function toXML($include_header = true)
+		public function toXML($header = "person")
 		{
 
-			$xml = new SimpleXMLElement("<person></person>");
+			$xml = new SimpleXMLElement("<" . $header . "></" . $header . ">");
 			$xml = parent::createXML($xml);
 			$xml->addChild("company-id",$this->getCompanyId());
 			$xml->addChild("company-name",$this->getCompanyName());

@@ -21,17 +21,14 @@
 				return "";
 			}
 
-			$xml = "<party>\n";
-
 			if ($this->type == "Company") {
-				$xml .= $this->company->toXML(false);
+				$xml = $this->company->toXML("party");
 			} elseif ($this->type == "Person") {
-				$xml .= $this->person->toXML(false);
+				$xml = $this->person->toXML("party");
 			} else {
 				throw new Exception("Party type is not supported: " . $this->type);
 			}
-
-			$xml .= "</party>\n";
+			$xml = str_replace('<?xml version="1.0"?>','',$xml);
 			return $xml;
 		}		
 		
