@@ -61,9 +61,7 @@
 
 			if ($this->id == null) {
 
-				print $deal_xml;
 				$new_deal_xml = $this->postDataWithVerb("/deals.xml", $deal_xml, "POST");
-				print $new_deal_xml;
 				$this->checkForErrors("Deal", 201);	
 				$this->loadFromXMLObject(simplexml_load_string($new_deal_xml));
 			} else {
