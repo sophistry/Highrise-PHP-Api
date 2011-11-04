@@ -314,15 +314,21 @@ require_once('HighriseWebAddress.class.php');
 			return $note;
 		}
 		
+		public function findCompanyById($id) {
+			$xml = $this->getURL("/companies/$id.xml");
+			$this->checkForErrors("Company");
+			$xml_object = simplexml_load_string($xml);
+			$company = new HighriseCompany($this);
+			$company->loadFromXMLObject($xml_object);
+			return $company;
+		}
+
+
 		public function findPersonById($id)
 		{
 			$xml = $this->getURL("/people/$id.xml");
-			
 			$this->checkForErrors("Person");
-			
-			
 			$xml_object = simplexml_load_string($xml);
-			
 			$person = new HighrisePerson($this);
 			$person->loadFromXMLObject($xml_object);
 			return $person;
@@ -345,7 +351,12 @@ require_once('HighriseWebAddress.class.php');
 		
 		public function findAllPeople()
 		{
-			return $this->parsePeopleListing("/people.xml");	
+			return $this->parseListing("/people.xml");	
+		}
+		
+		public function findAllCompanies()
+		{
+			return $this->parseListing("/companies.xml", undef, "company");	
 		}
 		
 		public function findPeopleByTagName($tag_name)
@@ -363,12 +374,38 @@ require_once('HighriseWebAddress.class.php');
 			return $this->findPeopleByTagId($tag_id);
 		}
 		
+		public function findCompaniesByTagName($tag_name)
+		{
+			$tags = $this->findAllTags();
+			foreach($tags as $tag)
+			{
+				if ($tag->name == $tag_name)
+					$tag_id = $tag->id;
+			}
+			
+			if (!isset($tag_id))
+				throw new Excepcion("Tag $tag_name not found");
+			
+			return $this->findCompaniesByTagId($tag_id);
+		}
+		
+
+
 		public function findPeopleByTagId($tag_id)
 		{
 			$url = "/people.xml?tag_id=" . $tag_id;
-			$people = $this->parsePeopleListing($url);
+			$people = $this->parseListing($url);
 			return $people;	
 		}
+
+		public function findCompaniesByTagId($tag_id)
+		{
+			$url = "/companies.xml?tag_id=" . $tag_id;
+			$people = $this->parseListing($url);
+			return $people;	
+		}
+
+
 		
 		public function findPeopleByEmail($email)
 		{
@@ -379,24 +416,28 @@ require_once('HighriseWebAddress.class.php');
 		{
 			$url = "/people.xml?title=" . urlencode($title);
 			
-			$people = $this->parsePeopleListing($url);
+			$people = $this->parseListing($url);
 			return $people;
 		}
 
-
-		
 		public function findPeopleByCompanyId($company_id)
 		{
 			$url = "/companies/" . urlencode($company_id) . "/people.xml";
-			$people = $this->parsePeopleListing($url);
+			$people = $this->parseListing($url);
 			return $people;
 		}
 
 		public function findPeopleBySearchTerm($search_term)
 		{
 			$url = "/people/search.xml?term=" . urlencode($search_term);
-			$people = $this->parsePeopleListing($url, 25);
+			$people = $this->parseListing($url, 25, "person");
 			return $people;
+		}
+		
+		public function findCompaniesBySearchTerm($search_term)
+		{
+			$url = "/companies/search.xml?term=" . urlencode($search_term);
+			return $this->parseListing($url, 25, "person");
 		}
 		
 		public function findPeopleBySearchCriteria($search_criteria)
@@ -410,39 +451,71 @@ require_once('HighriseWebAddress.class.php');
 				$sep = "&";
 			}
 			
-			$people = $this->parsePeopleListing($url, 25);
-			return $people;
+			return $this->parseListing($url, 25);
+		}
+		
+		public function findCompaniesBySearchCriteria($search_criteria)
+		{
+			$url = "/companies/search.xml";
+			
+			$sep = "?";
+			foreach($search_criteria as $criteria=>$value)
+			{
+				$url .= $sep . "criteria[" . urlencode($criteria) . "]=" . urlencode($value);
+				$sep = "&";
+			}
+			
+			return $this->parseListing($url, 25, "company");
 		}
 		
 		public function findPeopleSinceTime($time)
 		{
 			$url = "/people/search.xml?since=" . urlencode($time);
-			$people = $this->parsePeopleListing($url);
-			return $people;
+			return $this->parseListing($url);
 		}
-		public function parsePeopleListing($url, $paging_results = 500)
+
+		public function findCompaniesSinceTime($time)
+		{
+			$url = "/companies/search.xml?since=" . urlencode($time);
+			return $this->parseListing($url, undef, "company");
+		}
+
+		public function parseListing($url, $paging_results = 500, $type = "person")
 		{
 			if (strstr($url, "?"))
 				$sep = "&";
 			else
 				$sep = "?";
-				
+
+			if ($type == "person") {
+				$error_type = "People";
+			} elseif ($type == "company") {
+				$error_type = "Company";
+			} else {
+				throw new Exception("invalid type in parseListing");
+			}
+
 			$offset = 0;
 			$return = array();
 			while(true) // pagination
 			{
+				echo "hi there!\n";
 				$xml_url = $url . $sep . "n=$offset";
 				// print $xml_url;
 				$xml = $this->getUrl($xml_url);
-				$this->checkForErrors("People");
+				$this->checkForErrors($error_type);
 				$xml_object = simplexml_load_string($xml);
 
-				foreach($xml_object->person as $xml_person)
+				foreach($xml_object->$type as $xml_type_obj)
 				{
 					// print_r($xml_person);
-					$person = new HighrisePerson($this);
-					$person->loadFromXMLObject($xml_person);
-					$return[] = $person;
+					if ($type == "person") {
+						$newobj = new HighrisePerson($this);
+					} else {
+						$newobj = new HighriseCompany($this);
+					}
+					$newobj->loadFromXMLObject($xml_type_obj);
+					$return[] = $newobj;
 				}
 				
 				if (count($xml_object) != $paging_results)
