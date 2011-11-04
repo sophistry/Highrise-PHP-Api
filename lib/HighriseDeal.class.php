@@ -316,9 +316,18 @@
 		}
 
 
+		public function addParty($obj) {
+			if (!is_object($obj)) {
+				throw new Exception("You didn't pass in an object to addParty()");
+			}
+
+			$party = new HighriseParty($this->highrise,$obj);
+			$this->parties[] = $party;
+		}
+
 		public function createXML($xml) {
 
-			if ($this->getName() == null) {
+			if ($this->getName() == null) { 
 				throw new Exception("HighriseDeals::getName returned null which is invalid inside of createXML.  Name is required for a deal");
 			}
 
