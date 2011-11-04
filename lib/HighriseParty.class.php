@@ -3,15 +3,35 @@
 	class HighriseParty extends HighriseAPI
 	{
 		private $highrise;
+		public $person;
+		public $company;
 		public $type;
 
-		public function __construct(HighriseAPI $highrise)
+		public function __construct(HighriseAPI $highrise, $obj = '')
 		{
 			$this->highrise = $highrise;
 			$this->account = $highrise->account;
 			$this->token = $highrise->token;
 			$this->debug = $highrise->debug;
-			$this->curl = curl_init();		
+			$this->curl = curl_init();
+
+			if (!empty($obj)) {
+				if (!is_object($obj)) {
+					throw new Exception("you didn't pass in an object to the HighriseParty constructor");
+				}
+
+				$class = get_class($obj);
+
+				if ($class = "HighrisePerson") {
+					$this->person = $obj;
+					$this->type = "Person";
+				} elseif ($class = "HighriseCompany") {
+					$this->company = $obj;
+					$this->type = "Company";
+				} else {
+					throw new Exception("the object that gets passed into HighriseParty must be either HighrisePerson or HighriseCompany");
+				}
+			}
 		}
 
 		public function createXML(&$xml) {
