@@ -26,11 +26,6 @@
 		{
 			$xml = new SimpleXMLElement("<email-address></email-address>");
 			$xml = $this->createXML($xml);
-			# $xml = new SimpleXMLElement("<email-address></email-address>");
-			# $xml->addChild("id",$this->getId());
-			# $xml->id->addAttribute("type","integer");
-			# $xml->addChild("address",$this->getAddress());
-			# $xml->addChild("location",$this->getLocation());
 			return $xml->asXML();
 		}
 		
