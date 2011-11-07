@@ -499,7 +499,6 @@ require_once('HighriseWebAddress.class.php');
 			$return = array();
 			while(true) // pagination
 			{
-				echo "hi there!\n";
 				$xml_url = $url . $sep . "n=$offset";
 				// print $xml_url;
 				$xml = $this->getUrl($xml_url);
