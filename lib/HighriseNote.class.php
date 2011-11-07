@@ -199,6 +199,8 @@
 			$note->addChild("subject-id",$this->getSubjectId());
 			$note->addChild("subject-type",$this->getSubjectType());
 			$note->addChild("visible-to",$this->getVisibleTo());
+			$note->addChild("created-at",$this->getCreatedAt());
+			$note->{'created-at'}->addAttribute("type","datetime");
 
 			return $note->asXML();
 		}
