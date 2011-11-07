@@ -164,8 +164,9 @@
 			$xml = $this->getURL("/" . $this->url_base . "/" . $this->id . "/notes.xml");
 			$xml_obj = simplexml_load_string($xml);
 
-			if ($this->debug == true);
+			if ($this->debug == true) {
 				print_r($xml_obj);
+			}
 			
 			if (isset($xml_obj->note) && count($xml_obj->note) > 0)
 			{
