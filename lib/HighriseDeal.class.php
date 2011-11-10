@@ -316,6 +316,7 @@
 		}
 
 
+		/*
 		public function addParty($obj) {
 			if (!is_object($obj)) {
 				throw new Exception("You didn't pass in an object to addParty()");
@@ -324,6 +325,7 @@
 			$party = new HighriseParty($this->highrise,$obj);
 			$this->parties[] = $party;
 		}
+		*/
 
 		public function createXML($xml) {
 
@@ -382,10 +384,10 @@
 
 			$xml->addChild('visible-to',$this->getVisibleTo());
 
-			if (is_object($this->party)) {
-				$party = $xml->addChild("party");
-				$this->party->createXML($party);
-			}
+			# if (is_object($this->party)) {
+				# $party = $xml->addChild("party");
+				# $this->party->createXML($party);
+			# }
 
 			if (count($this->parties) > 0) {
 				$parties = $xml->addChild('parties');
