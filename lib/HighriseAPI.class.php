@@ -430,14 +430,14 @@ require_once('HighriseWebAddress.class.php');
 		public function findPeopleBySearchTerm($search_term)
 		{
 			$url = "/people/search.xml?term=" . urlencode($search_term);
-			$people = $this->parseListing($url, 25, "person");
+			$people = $this->parseListing($url, 25);
 			return $people;
 		}
 		
 		public function findCompaniesBySearchTerm($search_term)
 		{
 			$url = "/companies/search.xml?term=" . urlencode($search_term);
-			return $this->parseListing($url, 25, "person");
+			return $this->parseListing($url, 25, "company");
 		}
 		
 		public function findPeopleBySearchCriteria($search_criteria)
