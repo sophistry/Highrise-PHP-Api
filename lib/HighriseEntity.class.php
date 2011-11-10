@@ -128,28 +128,6 @@
 			
 		}
 		
-		public function getEmails()
-		{
-			$this->emails = array();
-			$xml = $this->getURL("/" . $this->url_base . "/" . $this->id . "/emails.xml");
-			$xml_obj = simplexml_load_string($xml);
-
-			if ($this->debug == true);
-				print_r($xml_obj);
-			
-			if (isset($xml_obj->email) && count($xml_obj->email) > 0)
-			{
-				foreach($xml_obj->email as $xml_email)
-				{
-					$email = new HighriseEmail($this->highrise);
-					$email->loadFromXMLObject($xml_email);
-					$this->addEmail($email);		
-				}
-			}
-			
-			return $this->emails;
-		}
-		
 		public function addNote(HighriseNote $note)
 		{
 			$note->setSubjectId($this->id);
