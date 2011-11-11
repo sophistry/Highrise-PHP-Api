@@ -38,9 +38,23 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$this->assertTrue(count($people)==1);
 	}
 
-	function testAddEmailAddress() {
-		
+	function testEmailAddresses() {
+
+		$testaddr = "xxx1xxx@xxx1xxx.com";
+		$this->person->addEmailAddress($testaddr);
+		$this->person->save();
+		$addresses = $this->person->getEmailAddresses();
+		foreach ($addresses as $obj) {
+			// this seems silly to me, but I'm still new at writing test cases.
+			if ($obj->address == $testaddr) {
+				$this->assertEqual($obj->address,$testaddr);
+				return;
+			}
+		}
+		$this->fail();
 	}
+
+
 
 }
 
