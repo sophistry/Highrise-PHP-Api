@@ -34,7 +34,6 @@
 		protected $original_customfields;
 		
 		public $notes;
-		public $emails;
 
 		public function __construct(HighriseAPI $highrise)
 		{
@@ -122,12 +121,6 @@
 			return $this->twitter_accounts;
 		}
 
-		public function addEmail(HighriseEmail $email)
-		{
-			$this->emails[$email->id] = $email;
-			
-		}
-		
 		public function addNote(HighriseNote $note)
 		{
 			$note->setSubjectId($this->id);
