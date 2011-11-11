@@ -469,7 +469,7 @@
 			$this->instant_messengers[] = $item;
 		}
 
-		public function addTwitterAccount($username, $location = "Work")
+		public function addTwitterAccount($username, $location = "Business")
 		{
 			$item = new HighriseTwitterAccount();
 			$item->setUsername($username);
