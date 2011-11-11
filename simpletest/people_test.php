@@ -76,6 +76,15 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$this->assertEqual("http://google.com",$webaddrs[0]->getUrl());
 	}
 
+	function testInstantMessenger() {
+		$this->person->addInstantMessenger("AIM","MYFAKEHANDLE");
+		$this->person->save();
+		$ims = $this->person->getInstantMessengers();
+		$this->assertEqual("AIM:MYFAKEHANDLE",(string)$ims[0]);
+	}
+
+
+
 }
 
 ?>
