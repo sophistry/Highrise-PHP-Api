@@ -194,6 +194,10 @@
 			}
 		}
 
+		public function getTags() {
+			return $this->tags;
+		}
+
 		public function addTag($v)
 		{
 			if ($v instanceof HighriseTag && !isset($this->tags[$v->getName()]))
