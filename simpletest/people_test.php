@@ -69,6 +69,12 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$this->assertEqual("(123) 123 - 1234",$phones[0]->getNumber());
 	}
 
+	function testWebAddress() {
+		$this->person->addWebAddress("http://google.com");
+		$this->person->save();
+		$webaddrs = $this->person->getWebAddresses();
+		$this->assertEqual("http://google.com",$webaddrs[0]->getUrl());
+	}
 
 }
 
