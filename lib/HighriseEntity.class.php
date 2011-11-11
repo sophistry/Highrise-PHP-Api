@@ -121,6 +121,7 @@
 			return $this->twitter_accounts;
 		}
 
+		
 		public function addNote(HighriseNote $note)
 		{
 			$note->setSubjectId($this->id);
@@ -411,11 +412,25 @@
 				}			
 			}
 		}
-		
+
+		public function addAddress($street, $city, $state, $zip, $country, $location = "Work") {
+
+			$addr = new HighriseAddress();
+			$addr->setStreet($street);
+			$addr->setCity($city);
+			$addr->setState($state);
+			$addr->setZip($zip);
+			$addr->setCountry($country);
+			$addr->setLocation($location);
+			$this->addresses[] = $addr;
+		}
+
+		/*
 		public function addAddress(HighriseAddress $address)
 		{
 			$this->addresses[] = $address;
 		}
+		*/
 		
 		public function addEmailAddress($address, $location = "Work")
 		{
