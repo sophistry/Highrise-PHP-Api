@@ -35,7 +35,8 @@ class TestOfHighrisePeople extends UnitTestCase {
 
 	function testFindTestUser() {
 		$people = $this->highrise->findPeopleByEmail('gF5fK5hU@Nc23jvHP.com');
-		$this->assertTrue(count($people)==1);
+		$cnt = count($people);
+		$this->assertTrue($cnt==1, "We found $cnt people and we should've only found one");
 	}
 
 	function testEmailAddresses() {
@@ -59,6 +60,13 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$this->person->save();
 		$addresses = $this->person->getAddresses();
 		$this->assertEqual("123 TEst Drive, TestCity, TE, 12345, USA.",$addresses[0]->getFullAddress());
+	}
+
+	function testPhoneNumber() {
+		$this->person->addPhoneNumber("(123) 123 - 1234");
+		$this->person->save();
+		$phones = $this->person->getPhoneNumbers();
+		$this->assertEqual("(123) 123 - 1234",$phones[0]->getNumber());
 	}
 
 
