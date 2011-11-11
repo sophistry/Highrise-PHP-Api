@@ -83,6 +83,15 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$this->assertEqual("AIM:MYFAKEHANDLE",(string)$ims[0]);
 	}
 
+	function testTwitter() {
+		$this->person->addTwitterAccount("MYFAKETWITTERACCOUNT");
+		$this->person->save();
+		$twitter_accounts = $this->person->getTwitterAccounts();
+		$this->assertEqual("MYFAKETWITTERACCOUNT",$twitter_accounts[0]->getUsername());
+	}
+
+
+
 
 
 }
