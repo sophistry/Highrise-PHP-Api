@@ -54,6 +54,12 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$this->fail();
 	}
 
+	function testAddresses() {
+		$this->person->addAddress("123 TEst Drive", "TestCity", "TE", "12345", "USA");
+		$this->person->save();
+		$addresses = $this->person->getAddresses();
+		$this->assertEqual("123 TEst Drive, TestCity, TE, 12345, USA.",$addresses[0]->getFullAddress());
+	}
 
 
 }
