@@ -45,14 +45,11 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$this->person->addEmailAddress($testaddr);
 		$this->person->save();
 		$addresses = $this->person->getEmailAddresses();
+		$emails = array();
 		foreach ($addresses as $obj) {
-			// this seems silly to me, but I'm still new at writing test cases.
-			if ($obj->address == $testaddr) {
-				$this->assertEqual($obj->address,$testaddr);
-				return;
-			}
+			$emails[] = $obj->address;
 		}
-		$this->fail();
+		$this->assertTrue(in_array($testaddr,$emails));
 	}
 
 	function testAddresses() {
@@ -89,6 +86,15 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$twitter_accounts = $this->person->getTwitterAccounts();
 		$this->assertEqual("MYFAKETWITTERACCOUNT",$twitter_accounts[0]->getUsername());
 	}
+
+	function testTags() {
+		$this->person->addTag("XXXFAKETAGXXX");
+		$this->person->save();
+		$tags = array_keys($this->person->getTags());
+		$this->assertTrue(in_array("XXXFAKETAGXXX",$tags));
+	}
+
+
 
 
 
