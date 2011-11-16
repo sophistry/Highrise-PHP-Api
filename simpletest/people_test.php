@@ -94,6 +94,15 @@ class TestOfHighrisePeople extends UnitTestCase {
 		$this->assertTrue(in_array("XXXFAKETAGXXX",$tags));
 	}
 
+/*
+	function testCustomFields() {
+		$this->person->addCustomfield("XXXFAKETAGXXX");
+		$this->person->save();
+		$tags = array_keys($this->person->getTags());
+		$this->assertTrue(in_array("XXXFAKETAGXXX",$tags));
+	}
+*/
+
 
 
 

@@ -336,10 +336,9 @@
 			{
 				foreach($xml_obj->{'tag'} as $value)
 				{
-					$tag = new HighriseTag($value->{'id'}, $value->{'name'});
+					$tag = new HighriseTag($value->{'id'}, $value->{'name'}, $this->type);
 					$original_tags[$tag->getName()] = 1;	
 					$this->addTag($tag);
-					# print_r($this);
 				}
 			}
 		}
