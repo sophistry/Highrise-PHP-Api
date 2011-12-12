@@ -201,8 +201,13 @@
 			$note->addChild("visible-to",$this->getVisibleTo());
 			$note->addChild("created-at",$this->getCreatedAt());
 			$note->{'created-at'}->addAttribute("type","datetime");
+			$this->_toXMLAdditionalFields($note);
 
 			return $note->asXML();
+		}
+		
+		protected function _toXMLAdditionalFields(&$note) {
+		  // Child classes can override this to insert additional children into the xml object
 		}
 
 		

@@ -42,4 +42,9 @@ require_once('HighriseNote.class.php');
 
 			return true;
 		}
+
+		protected function _toXMLAdditionalFields(&$note) {
+			$note->addChild("title", $this->title);
+		}
+
 	}

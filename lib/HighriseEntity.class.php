@@ -30,8 +30,8 @@
 		public $tags;
 		protected $original_tags;
 		
-		public $customfields;
-		protected $original_customfields;
+		public $customfields = array();
+		protected $original_customfields = array();
 		
 		public $notes;
 
@@ -214,13 +214,15 @@
 			}
 		}
 
-		public function addCustomfield($v)
+		public function addCustomfield($v, $val=FALSE)
 		{
 			if ($v instanceof HighriseCustomfield && !isset($this->customfields[$v->getSubjectFieldLabel()]))
 			{
 				$this->customfields[$v->getSubjectFieldLabel()] = $v;
 				$this->original_customfields[$v->getSubjectFieldLabel()] = 1;
-				
+				if($val) {
+				  $this->customfields[$v->getSubjectFieldLabel()]->setValue($val);
+				}
 			}
 			elseif (!isset($this->customfields[$v]))
 			{

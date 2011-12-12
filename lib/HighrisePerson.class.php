@@ -29,6 +29,16 @@ require_once('HighriseEntity.class.php');
 			$xml->addChild("company-name",$this->getCompanyName());
 			$xml->addChild("first-name",$this->getFirstName());
 			$xml->addChild("last-name",$this->getLastName());
+			$subject_datas = $xml->addChild("subject_datas");
+			$subject_datas->addAttribute("type", "array");
+			foreach($this->customfields as $custom_field) {
+  			$d = $subject_datas->addChild("subject_data");
+  			foreach($custom_field->getXMLObject()->children() as $child) {
+  			  $c = $d->addChild($child->getName(), (string)$child);
+  			  foreach($child->attributes() as $attr)
+  			    $c->addAttribute($attr->getName(), (string)$attr);
+  			}
+			}
 			return $xml;
 		}
 		public function toXML($header = "person")
@@ -41,7 +51,6 @@ require_once('HighriseEntity.class.php');
 		
 		public function loadFromXMLObject($xml_obj)
 		{
-
 			parent::loadFromXMLObject($xml_obj);
 
 			$this->setFirstName($xml_obj->{'first-name'});
@@ -49,7 +58,6 @@ require_once('HighriseEntity.class.php');
 			$this->setTitle($xml_obj->{'title'});
 			$this->setCompanyId($xml_obj->{'company-id'});
 			$this->setCompanyName($xml_obj->{'company-name'});
-			
 		}
 		
 		public function setCompanyId($company_id)

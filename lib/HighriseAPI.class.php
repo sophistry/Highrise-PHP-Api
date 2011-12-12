@@ -89,7 +89,7 @@ require_once('HighriseWebAddress.class.php');
 			$ret = curl_exec($this->curl);
 			
 			if ($this->debug == true)
-				print "Begin Request Body ============================\n" . $request_body . "End Request Body ==============================\n";
+				print "Begin Request Body ============================\n" . htmlspecialchars($request_body) . "End Request Body ==============================\n";
 			
 			curl_setopt($this->curl,CURLOPT_HTTPGET, true);
 			
@@ -535,7 +535,7 @@ require_once('HighriseWebAddress.class.php');
 			$ret = array();
 			foreach($xml_object->{'subject-field'} as $cf)
 			{
-				$ret[(string)$cf->label] = new HighriseCustomfield((string)$cf->id, null, null, (string)$cf->label);
+				$ret[(string)$cf->label] = new HighriseCustomfield(null, null, (string)$cf->id, (string)$cf->label);
 			}
 			
 			return $ret;
