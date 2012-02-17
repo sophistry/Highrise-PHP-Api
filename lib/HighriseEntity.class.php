@@ -558,5 +558,10 @@
 			return $this->id;
 		}
 
+        public function getCustomFields()
+        {
+            return $this->customfields;
+        }
+
 	}
 	

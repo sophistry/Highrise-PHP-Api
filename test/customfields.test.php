@@ -12,13 +12,13 @@ $hr->setToken($argv[2]);
 $people = $hr->findPeopleBySearchTerm("Person Test");
 
 $person = $people[0];
+
 $fields = $person->getCustomFields();
 foreach($fields as $field)
 {
 	print_r($field);
 	# print $note->toXML();
 }
-
 // Create new field
 
 $field = new HighriseCustomfield($hr);
