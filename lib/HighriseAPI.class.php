@@ -6,6 +6,7 @@ require_once('HighriseCustomfield.class.php');
 require_once('HighriseDeal.class.php');
 require_once('HighriseEmailAddress.class.php');
 require_once('HighriseEmail.class.php');
+require_once('HighriseGroup.class.php');
 require_once('HighriseInstantMessenger.class.php');
 require_once('HighriseNote.class.php');
 require_once('HighriseParty.class.php');
@@ -540,6 +541,26 @@ require_once('HighriseWebAddress.class.php');
 			
 			return $ret;
 		}
+
+        /* Groups */
+
+        public function findAllGroups()
+        {
+            $xml = $this->getUrl("/groups.xml");
+            $this->checkForErrors("Groups");
+
+            $xml_object = simplexml_load_string($xml);
+
+            $ret = array();
+            foreach ($xml_object->group as $xml_group)
+            {
+                $group = new HighriseGroup();
+                $group->loadFromXMLObject($xml_group);
+                $ret[] = $group;
+            }
+
+            return $ret;
+        }
 		
 	}
 	
