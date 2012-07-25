@@ -9,6 +9,7 @@ require_once('HighriseEmail.class.php');
 require_once('HighriseGroup.class.php');
 require_once('HighriseInstantMessenger.class.php');
 require_once('HighriseNote.class.php');
+require_once('HighriseComment.class.php');
 require_once('HighriseParty.class.php');
 require_once('HighriseEntity.class.php');
 require_once('HighrisePerson.class.php');
@@ -314,6 +315,17 @@ require_once('HighriseWebAddress.class.php');
 			$note->loadFromXMLObject($note_xml);
 			return $note;
 		}
+
+		
+		public function findCommentById($id)
+		{
+			$xml = $this->getURL("/comments/$id.xml");
+			$this->checkForErrors("Comment");
+			$comments_xml = simplexml_load_string($xml);
+			$comment = new HighriseComment($this);
+			$comment->loadFromXMLObject($comments_xml);
+			return $comment;
+		}
 		
 		public function findCompanyById($id) {
 			$xml = $this->getURL("/companies/$id.xml");
@@ -407,7 +419,22 @@ require_once('HighriseWebAddress.class.php');
 		}
 
 
+		/**
+		*
+		 * Comments are linked to notes by parent_id
+		 * Get all comments linked to a note
+		 * @param $note_id int the note id you want comments for
+		 * @return $comments array comments linked to note_id
+		 *
+		 */
+		public function findCommentsByNoteId($note_id)
+		{
+			$url = "/notes/$note_id/comments.xml";
+			$comments = $this->parseListing($url, 500, "comment");
+			return $comments;
+		}
 		
+
 		public function findPeopleByEmail($email)
 		{
 			return $this->findPeopleBySearchCriteria(array("email"=>$email));
@@ -492,6 +519,8 @@ require_once('HighriseWebAddress.class.php');
 				$error_type = "People";
 			} elseif ($type == "company") {
 				$error_type = "Company";
+			} elseif ($type == "comment") {
+				$error_type = "Comment";
 			} else {
 				throw new Exception("invalid type in parseListing");
 			}
@@ -501,16 +530,16 @@ require_once('HighriseWebAddress.class.php');
 			while(true) // pagination
 			{
 				$xml_url = $url . $sep . "n=$offset";
-				// print $xml_url;
 				$xml = $this->getUrl($xml_url);
 				$this->checkForErrors($error_type);
 				$xml_object = simplexml_load_string($xml);
 
 				foreach($xml_object->$type as $xml_type_obj)
 				{
-					// print_r($xml_person);
 					if ($type == "person") {
 						$newobj = new HighrisePerson($this);
+					} elseif ($type == "comment") {
+						$newobj = new HighriseComment($this);
 					} else {
 						$newobj = new HighriseCompany($this);
 					}
