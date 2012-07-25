@@ -34,7 +34,10 @@
 		{
 			if ($this->getFrame() == null)
 				throw new Exception("You need to specify a valid time frame to save a task");
-
+			
+			if ($this->getFrame() == "specific" && $this->getDueAt() == null)
+				throw new Exception("You must specify a 'due at' date when using time frame 'specific'");
+			
 			if ($this->id == null) // Create
 			{
 				$task_xml = $this->toXML();
@@ -159,7 +162,7 @@
 		
 		public function setFrame($subject_type)
 		{
-			$valid_frames = array("today", "tomorrow", "this_week", "next_week", "later", "overdue");
+			$valid_frames = array("today", "tomorrow", "this_week", "next_week", "later", "overdue", "specific");
 			$frame = str_replace(" ", "_", strtolower($subject_type));
 			
 			if ($frame != null && !in_array($frame, $valid_frames))

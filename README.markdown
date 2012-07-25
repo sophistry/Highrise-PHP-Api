@@ -10,14 +10,15 @@ Features currently implemented:
 
 * People
 * Tasks
+  - This fork allows use of the "specific" time frame setting.
 * Notes
 * Emails
 * Tags
 * Users
 
 * Deals
+  - This fork allows use of the "NamedGroup" visibleTo setting.
 * CustomFields
-
 
 Examples
 ========

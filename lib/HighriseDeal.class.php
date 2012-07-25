@@ -56,11 +56,12 @@
 		{
 			if ($this->getName() == null)
 				throw new Exception("getName() returned null, you cannot save a deal without the name");
-
+				
+			if ($this->getVisibleTo() == "NamedGroup" && $this->getGroupId() == null)
+				throw new Exception("Using the 'NamedGroup' option for visibleTo requires setting the group id.");
 			$deal_xml = $this->toXML();
 
 			if ($this->id == null) {
-
 				$new_deal_xml = $this->postDataWithVerb("/deals.xml", $deal_xml, "POST");
 				$this->checkForErrors("Deal", 201);	
 				$this->loadFromXMLObject(simplexml_load_string($new_deal_xml));
@@ -291,8 +292,9 @@
 
 		public function setVisibleTo($visible_to)
 		{
-			$valid_permissions = array("Everyone", "Owner");
-			$visible_to = ucwords(strtolower($visible_to));
+			$valid_permissions = array("Everyone", "Owner", "NamedGroup");
+			if ($visible_to != 'NamedGroup')
+				$visible_to = ucwords(strtolower($visible_to));
 			if ($visible_to != null && !in_array($visible_to, $valid_permissions)) {
 				throw new Exception("$visible_to is not a valid visibility permission. Available visibility permissions: " . implode(", ", $valid_permissions));
 			}
