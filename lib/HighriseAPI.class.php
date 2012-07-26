@@ -382,7 +382,7 @@ require_once('HighriseWebAddress.class.php');
 			}
 			
 			if (!isset($tag_id))
-				throw new Excepcion("Tag $tag_name not found");
+				throw new Exception("Tag $tag_name not found");
 			
 			return $this->findPeopleByTagId($tag_id);
 		}
@@ -397,7 +397,7 @@ require_once('HighriseWebAddress.class.php');
 			}
 			
 			if (!isset($tag_id))
-				throw new Excepcion("Tag $tag_name not found");
+				throw new Exception("Tag $tag_name not found");
 			
 			return $this->findCompaniesByTagId($tag_id);
 		}
@@ -423,6 +423,7 @@ require_once('HighriseWebAddress.class.php');
 		*
 		 * Comments are linked to notes by parent_id
 		 * Get all comments linked to a note
+		 *
 		 * @param $note_id int the note id you want comments for
 		 * @return $comments array comments linked to note_id
 		 *
