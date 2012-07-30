@@ -194,7 +194,16 @@
 			$note->addChild("id",$this->getId());
 			$note->id->addAttribute("type","integer");
 			$note->addChild("author-id",$this->getAuthorId());
-			$note->addChild("body",$this->getBody());
+
+			// 2012 HACK to replace all raw ampersands with &amp;
+			// to avoid the unterminated entity error when the 
+			// addChild() method tries to add body that has a 
+			// standlone ampersand
+			// see this: 
+			// http://stackoverflow.com/questions/552957/rationale-behind-simplexmlelements-handling-of-text-values-in-addchild-and-adda
+			$body = str_replace('&','&amp;',$this->getBody());
+			$note->addChild("body",$body);
+
 			$note->addChild("owner-id",$this->getOwnerId());
 			$note->addChild("subject-id",$this->getSubjectId());
 			$note->addChild("subject-type",$this->getSubjectType());
