@@ -5,10 +5,10 @@ require_once('HighriseCompany.class.php');
 require_once('HighriseCustomfield.class.php');
 require_once('HighriseDeal.class.php');
 require_once('HighriseEmailAddress.class.php');
+require_once('HighriseNote.class.php');
 require_once('HighriseEmail.class.php');
 require_once('HighriseGroup.class.php');
 require_once('HighriseInstantMessenger.class.php');
-require_once('HighriseNote.class.php');
 require_once('HighriseComment.class.php');
 require_once('HighriseParty.class.php');
 require_once('HighriseEntity.class.php');
@@ -431,6 +431,22 @@ require_once('HighriseWebAddress.class.php');
 		public function findCommentsByNoteId($note_id)
 		{
 			$url = "/notes/$note_id/comments.xml";
+			$comments = $this->parseListing($url, 500, "comment");
+			return $comments;
+		}
+
+		/**
+		*
+		 * Comments are linked to emails by parent_id
+		 * Get all comments linked to an email
+		 *
+		 * @param $email_id int the email id you want comments for
+		 * @return $comments array comments linked to email_id
+		 *
+		 */
+		public function findCommentsByEmailId($email_id)
+		{
+			$url = "/emails/$email_id/comments.xml";
 			$comments = $this->parseListing($url, 500, "comment");
 			return $comments;
 		}

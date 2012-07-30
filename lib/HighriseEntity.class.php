@@ -34,6 +34,7 @@
 		protected $original_customfields = array();
 		
 		public $notes;
+		public $emails;
 
 		public function __construct(HighriseAPI $highrise)
 		{
@@ -130,6 +131,14 @@
 			$this->notes[$note->id] = $note;
 		}
 		
+		public function addEmail(HighriseEmail $email)
+		{
+			$email->setSubjectId($this->id);
+			$email->setSubjectType("Party");
+			$email->save();
+			$this->emails[$email->id] = $email;
+		}
+		
 		public function getNotes()
 		{
 			$this->notes = array();
@@ -151,6 +160,32 @@
 			}
 			
 			return $this->notes;
+		}
+
+		/**
+		 * Get emails the same way as notes
+		 */
+		public function getEmails()
+		{
+			$this->emails = array();
+			$xml = $this->getURL("/" . $this->url_base . "/" . $this->id . "/emails.xml");
+			$xml_obj = simplexml_load_string($xml);
+
+			if ($this->debug == true) {
+				print_r($xml_obj);
+			}
+			
+			if (isset($xml_obj->email) && count($xml_obj->email) > 0)
+			{
+				foreach($xml_obj->email as $xml_email)
+				{
+					$email = new HighriseEmail($this->highrise);
+					$email->loadFromXMLObject($xml_email);
+					$this->addEmail($email);		
+				}
+			}
+			
+			return $this->emails;
 		}
 		
 		public function saveTags()

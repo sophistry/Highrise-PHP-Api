@@ -1,6 +1,6 @@
 <?php
 
-require_once('HighriseNote.class.php');
+//require_once('HighriseNote.class.php');
 
 	class HighriseEmail extends HighriseNote
 	{
