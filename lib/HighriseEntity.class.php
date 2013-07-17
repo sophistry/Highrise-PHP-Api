@@ -139,6 +139,14 @@
 			$this->emails[$email->id] = $email;
 		}
 		
+		public function addTask(HighriseTask $task)
+		{
+			$task->setSubjectId($this->id);
+			$task->setSubjectType("Party");
+			$task->save();
+			$this->tasks[$task->id] = $task;
+		}
+		
 		public function getNotes()
 		{
 			$this->notes = array();
@@ -186,6 +194,29 @@
 			}
 			
 			return $this->emails;
+		}
+
+		public function getTasks()
+		{
+			$this->notes = array();
+			$xml = $this->getURL("/" . $this->url_base . "/" . $this->id . "/tasks.xml");
+			$xml_obj = simplexml_load_string($xml);
+
+			if ($this->debug == true) {
+				print_r($xml_obj);
+			}
+			
+			if (isset($xml_obj->task) && count($xml_obj->task) > 0)
+			{
+				foreach ($xml_obj->task as $xml_task)
+				{
+					$task = new HighriseTask($this->highrise);
+					$task->loadFromXMLObject($xml_task);
+					$this->addTask($task);		
+				}
+			}
+			
+			return $this->tasks;
 		}
 		
 		public function saveTags()
