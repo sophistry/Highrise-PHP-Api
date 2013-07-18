@@ -35,6 +35,7 @@
 		
 		public $notes;
 		public $emails;
+		public $tasks;
 
 		public function __construct(HighriseAPI $highrise)
 		{
