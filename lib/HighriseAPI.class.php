@@ -207,6 +207,13 @@ require_once('HighriseWebAddress.class.php');
 		}
 		
 		/* Tasks */
+
+		public function findAllTasks()
+		{
+			$xml = $this->getUrl("/tasks.xml");
+			$this->checkForErrors("Tasks");
+			return $this->parseTasks($xml);
+		}
 		
 		public function findCompletedTasks()
 		{
@@ -221,7 +228,6 @@ require_once('HighriseWebAddress.class.php');
 			$this->checkForErrors("Tasks");
 			return $this->parseTasks($xml);
 		}
-
 		
 		public function findUpcomingTasks()
 		{
